@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: a225034862650A   
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      MSSQL_DATABASE: ucrypt            
+    ports:
+      - "1433:1433"                      
+    networks:
+      - uCryptNetwork
+  
+# Initializes the database server and create DB. This is needed as there are no guarantees on DB server startup in time before backend.
+  db-init:
+    image: mcr.microsoft.com/mssql/server
+    network_mode: service:sql-server
+    command: bash -c 'until /opt/mssql-tools/bin/sqlcmd -U sa -P a225034862650A -Q "CREATE DATABASE ucrypt"; do echo retry && sleep 1; done'
+    depends_on:
+      - sql-server
+    # networks:
+    #   - uCryptNetwork
+
+# Frontend
+  frontend:
+    build:
+    # Assuming the fronend folder is one level up from the docker-compose.yml file
+      context: ../UCryptPortal
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - uCryptNetwork
+    depends_on:
+      - ucrypt-app
+
+# Backend
+  ucrypt-app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sql-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sql-server:1433;databaseName=ucrypt;encrypt=true;trustServerCertificate=true;
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: a225034862650A
+      SPRING_PROFILES_ACTIVE: dev,docker
+      BASIC_FOLDER_PATH: /data
+    volumes:
+      - data-volume:/data
+    networks:
+      - uCryptNetwork
+
+volumes:
+  data-volume:
+
+networks:
+  uCryptNetwork:
+    driver: bridge
