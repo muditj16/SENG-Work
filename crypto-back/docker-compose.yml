@@ -3,6 +3,7 @@ version: '3.8'
 services:
   sql-server:
     image: mcr.microsoft.com/mssql/server
+    restart: always
     environment:
       SA_PASSWORD: a225034862650A   
       ACCEPT_EULA: Y
@@ -29,6 +30,7 @@ services:
     # Assuming the fronend folder is one level up from the docker-compose.yml file
       context: ../UCryptPortal
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "80:80"
     networks:
@@ -39,6 +41,7 @@ services:
 # Backend
   ucrypt-app:
     build: .
+    restart: always
     ports:
       - "8080:8080"
     depends_on:

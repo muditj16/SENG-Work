@@ -40,15 +40,73 @@ public class DatabaseSeeder {
 
         final var adminRole = this.roleRepository.findByName(Role.RoleProperty.ADMIN.getName())
                 .orElseThrow();
+
+        final var employeeRole = this.roleRepository.findByName(Role.RoleProperty.EMPLOYEE.getName())
+                .orElseThrow();
+
         final var encodedPassword= this.passwordEncoder.encode(this.mainAccPassword);
-        final var user = User.builder()
+        this.userRepository.save(User.builder()
                 .name("Admin")
                 .email(this.mainAccEmail)
                 .password(encodedPassword)
                 .role(adminRole)
                 .status(ACTIVE)
-                .build();
+                .build());
 
-        this.userRepository.save(user);
+        this.userRepository.save(User.builder()
+                .name("Jeanne Lagasse – Founder & Chairman")
+                .email("jeanne.lagasse@ucrypt.com")
+                .password(this.passwordEncoder.encode("X#abcRT"))
+                .role(employeeRole)
+                .status(ACTIVE)
+                .build());
+
+        this.userRepository.save(User.builder()
+                .name("Ayesha Al Chamy – CEO")
+                .email("ayesha.alchamy@ucrypt.com")
+                .password(this.passwordEncoder.encode("Oranus$%34"))
+                .role(employeeRole)
+                .status(ACTIVE)
+                .build());
+
+        this.userRepository.save(User.builder()
+                .name("Amy Keita – CFO")
+                .email("amy.keita@ucrypt.com")
+                .password(this.passwordEncoder.encode("L@guna546"))
+                .role(employeeRole)
+                .status(ACTIVE)
+                .build());
+                
+        this.userRepository.save(User.builder()
+                .name("Kumar Viswanath - CTO")
+                .email("kumar.viswanath@ucrypt.com")
+                .password(this.passwordEncoder.encode("@lphaG@mma"))
+                .role(employeeRole)
+                .status(ACTIVE)
+                .build());
+
+        this.userRepository.save(User.builder()
+                .name("Lin Zhang - SVP of Worldwide Sales")
+                .email("lin.zhang@ucrypt.com")
+                .password(this.passwordEncoder.encode("BetaW0rld56"))
+                .role(employeeRole)
+                .status(ACTIVE)
+                .build());
+
+        this.userRepository.save(User.builder()
+                .name("Ahmad Alezani – VP of Engineering")
+                .email("ahmad.alezani@ucrypt.com")
+                .password(this.passwordEncoder.encode("tryABX90&"))
+                .role(employeeRole)
+                .status(ACTIVE)
+                .build());
+
+        this.userRepository.save(User.builder()
+                .name("Wei Wang – Chief   Information Officer")
+                .email("wei.wang@ucrypt.com")
+                .password(this.passwordEncoder.encode("poiuytrew"))
+                .role(employeeRole)
+                .status(ACTIVE)
+                .build());
     }
 }
