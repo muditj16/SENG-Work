@@ -22,8 +22,10 @@ public class CustomAuditAware implements AuditorAware<User> {
     private EntityManager entityManager;
 
     @Override
-    public Optional<User> getCurrentAuditor() {
-        if (!(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof org.springframework.security.core.userdetails.User)) {
+     public Optional<User> getCurrentAuditor() {
+        if (SecurityContextHolder.getContext().getAuthentication() == null ||
+                !(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof org.springframework.security.core.userdetails.User)
+        ) {
             return Optional.empty();
         }
 
