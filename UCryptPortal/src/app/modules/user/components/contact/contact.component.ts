@@ -38,12 +38,14 @@ export class ContactComponent implements OnInit{
 
 
   onSubmit(){
+    debugger
     this.submitted= true;
     if(this.form.valid){
+      // alert("Thank you for contacting us. One of our customer representatives will get back to you shortly.")
       this.spinnerService.show();
       setTimeout(() => {
         this.spinnerService.hide();
-        this.messageService.add({severity:'success', detail: 'sent successfully'});
+        this.messageService.add({severity:'success', detail: 'Thank you for contacting us. One of our customer representatives will get back to you shortly."'});
       }, 1000);
     }
 

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.uranus.ucrypt</groupId>
-	<artifactId>ucrypt</artifactId>
+	<artifactId>Uranus</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ucrypt</name>
+	<name>Uranus</name>
 	<description>Demo project for Spring Boot</description>
 	<packaging>war</packaging>
 	<properties>
