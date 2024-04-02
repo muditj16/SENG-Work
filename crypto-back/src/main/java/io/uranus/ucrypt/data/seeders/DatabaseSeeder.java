@@ -55,7 +55,7 @@ public class DatabaseSeeder {
 
         this.userRepository.save(User.builder()
                 .name("Jeanne Lagasse – Founder & Chairman")
-                .email("jeanne.lagasse@ucrypt.com")
+                .email("jeanne.lagasse@uranus.com")
                 .password(this.passwordEncoder.encode("X#abcRT"))
                 .role(employeeRole)
                 .status(ACTIVE)
@@ -63,7 +63,7 @@ public class DatabaseSeeder {
 
         this.userRepository.save(User.builder()
                 .name("Ayesha Al Chamy – CEO")
-                .email("ayesha.alchamy@ucrypt.com")
+                .email("ayesha.alchamy@uranus.com")
                 .password(this.passwordEncoder.encode("Oranus$%34"))
                 .role(employeeRole)
                 .status(ACTIVE)
@@ -71,7 +71,7 @@ public class DatabaseSeeder {
 
         this.userRepository.save(User.builder()
                 .name("Amy Keita – CFO")
-                .email("amy.keita@ucrypt.com")
+                .email("amy.keita@uranus.com")
                 .password(this.passwordEncoder.encode("L@guna546"))
                 .role(employeeRole)
                 .status(ACTIVE)
@@ -79,7 +79,7 @@ public class DatabaseSeeder {
                 
         this.userRepository.save(User.builder()
                 .name("Kumar Viswanath - CTO")
-                .email("kumar.viswanath@ucrypt.com")
+                .email("kumar.viswanath@uranus.com")
                 .password(this.passwordEncoder.encode("@lphaG@mma"))
                 .role(employeeRole)
                 .status(ACTIVE)
@@ -87,7 +87,7 @@ public class DatabaseSeeder {
 
         this.userRepository.save(User.builder()
                 .name("Lin Zhang - SVP of Worldwide Sales")
-                .email("lin.zhang@ucrypt.com")
+                .email("lin.zhang@uranus.com")
                 .password(this.passwordEncoder.encode("BetaW0rld56"))
                 .role(employeeRole)
                 .status(ACTIVE)
@@ -95,7 +95,7 @@ public class DatabaseSeeder {
 
         this.userRepository.save(User.builder()
                 .name("Ahmad Alezani – VP of Engineering")
-                .email("ahmad.alezani@ucrypt.com")
+                .email("ahmad.alezani@uranus.com")
                 .password(this.passwordEncoder.encode("tryABX90&"))
                 .role(employeeRole)
                 .status(ACTIVE)
@@ -103,7 +103,7 @@ public class DatabaseSeeder {
 
         this.userRepository.save(User.builder()
                 .name("Wei Wang – Chief   Information Officer")
-                .email("wei.wang@ucrypt.com")
+                .email("wei.wang@uranus.com")
                 .password(this.passwordEncoder.encode("poiuytrew"))
                 .role(employeeRole)
                 .status(ACTIVE)
