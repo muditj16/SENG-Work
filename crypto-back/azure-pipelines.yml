@@ -10,7 +10,18 @@ pool:
 jobs:
 - job: BackendBuild
   displayName: 'Build Backend'
+  variables: # Comment in case of Azure DevOps Microsoft build agent
+      - name: JAVA_HOME_17_X64
+        value: /usr/lib/jvm/java-17-openjdk-amd64
+      - name: JAVA_HOME
+        value: /usr/lib/jvm/java-17-openjdk-amd64
   steps:
+  # Uncomment in case of Azure DevOps Microsoft build agent
+  # - task: JavaToolInstaller@0 
+  #   inputs: 
+  #     versionSpec: '17'
+  #     jdkArchitectureOption: 'x64'
+  #     jdkSourceOption: 'PreInstalled'
   - task: Maven@3
     inputs:
       mavenPomFile: 'crypto-back/pom.xml'
