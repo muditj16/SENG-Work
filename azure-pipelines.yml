@@ -1,0 +1,74 @@
+trigger:
+- main
+
+pr:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: BackendBuild
+  displayName: 'Build Backend'
+  variables: # Comment in case of Azure DevOps Microsoft build agent
+      - name: JAVA_HOME_17_X64
+        value: /usr/lib/jvm/java-17-openjdk-amd64
+      - name: JAVA_HOME
+        value: /usr/lib/jvm/java-17-openjdk-amd64
+  steps:
+  # Uncomment in case of Azure DevOps Microsoft build agent
+  # - task: JavaToolInstaller@0 
+  #   inputs: 
+  #     versionSpec: '17'
+  #     jdkArchitectureOption: 'x64'
+  #     jdkSourceOption: 'PreInstalled'
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'crypto-back/pom.xml'
+      goals: 'package -DskipTests'
+      publishJUnitResults: false
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'
+      jdkArchitectureOption: 'x64'
+      cleanPackageCache: true
+      mavenOptions: '-Xmx3072m'
+    displayName: 'Maven Package Backend'
+
+- job: FrontendBuild
+  displayName: 'Build Frontend'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'
+    displayName: 'Install Node.js'
+  
+  - script: |
+      cd UCryptPortal
+      npm install
+      npm install -g @angular/cli@15.0.1
+      ng build --configuration=docker
+    displayName: 'Build Angular App'
+
+- job: DockerImageBuild
+  displayName: 'Build Docker Images'
+  dependsOn: 
+    - BackendBuild
+    - FrontendBuild
+  steps:
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
+      repository: 'backend'
+      command: 'build'
+      Dockerfile: 'crypto-back/Dockerfile'
+      tags: 'latest'
+    displayName: 'Build Backend Docker Image'
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
+      repository: 'frontend'
+      command: 'build'
+      Dockerfile: 'UCryptPortal/Dockerfile'
+      tags: 'latest'
+    displayName: 'Build Frontend Docker Image'
