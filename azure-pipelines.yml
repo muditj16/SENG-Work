@@ -55,14 +55,14 @@ jobs:
     - BackendBuild
     - FrontendBuild
   steps:
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'dockerHubReg'
-      command: 'login'
+ # - task: Docker@2
+  #  inputs:
+  #    containerRegistry: 'dockerHubReg'
+  #    command: 'login'
   - task: Docker@2
     inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
-      repository: 'backend'
+      repository: 'ucrypt.docker'
       command: 'build'
       Dockerfile: 'crypto-back/Dockerfile'
       tags: 'latest'
@@ -71,7 +71,7 @@ jobs:
   - task: Docker@2
     inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
-      repository: 'frontend'
+      repository: 'ucrypt.docker'
       command: 'build'
       Dockerfile: 'UCryptPortal/Dockerfile'
       tags: 'latest'
