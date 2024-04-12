@@ -57,6 +57,10 @@ jobs:
   steps:
   - task: Docker@2
     inputs:
+      containerRegistry: 'dockerHubReg'
+      command: 'login'
+  - task: Docker@2
+    inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
       repository: 'backend'
       command: 'build'
