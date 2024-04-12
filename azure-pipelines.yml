@@ -63,7 +63,7 @@ jobs:
     inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
       repository: 'ucrypt.docker'
-      command: 'build'
+      command: 'buildAndPush'
       Dockerfile: 'crypto-back/Dockerfile'
       tags: 'latest'
     displayName: 'Build Backend Docker Image'
@@ -72,7 +72,7 @@ jobs:
     inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
       repository: 'ucrypt.docker'
-      command: 'build'
+      command: 'buildAndPush'
       Dockerfile: 'UCryptPortal/Dockerfile'
       tags: 'latest'
     displayName: 'Build Frontend Docker Image'
