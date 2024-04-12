@@ -62,7 +62,7 @@ jobs:
   - task: Docker@2
     inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
-      repository: 'ucrypt.docker'
+      repository: 'itraore/ucrypt.docker'
       command: 'buildAndPush'
       Dockerfile: 'crypto-back/Dockerfile'
       tags: 'latest'
@@ -71,7 +71,7 @@ jobs:
   - task: Docker@2
     inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
-      repository: 'ucrypt.docker'
+      repository: 'itraore/ucrypt.docker'
       command: 'buildAndPush'
       Dockerfile: 'UCryptPortal/Dockerfile'
       tags: 'latest'
