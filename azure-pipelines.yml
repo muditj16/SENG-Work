@@ -76,3 +76,12 @@ jobs:
   #     Dockerfile: 'UCryptPortal/Dockerfile'
   #     tags: 'latest'
   #   displayName: 'Build Frontend Docker Image'
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'dockerHubFront' ## TODO Azure Container Registry 
+      repository: 'itraore/ucryptfront.docker'
+      command: 'buildAndPush'
+      Dockerfile: 'UCryptPortal/Dockerfile'
+      tags: 'latest'
+    displayName: 'Build Frontend Docker Image'
