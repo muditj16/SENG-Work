@@ -3,7 +3,7 @@ ENV SA_PASSWORD a225034862650A
 ENV ACCEPT_EULA Y
 ENV MSSQL_PID Express
 ENV DB_NAME ucrypt
-RUN (/opt/mssql-tools/bin/sqlcmd -U sa -P $SA_PASSWORD -Q "CREATE DATABASE ucrypt")
+#RUN (/opt/mssql-tools/bin/sqlcmd -U sa -P $SA_PASSWORD -Q "CREATE DATABASE ucrypt")
 
 # Build stage
 FROM maven:3.8.4-openjdk-17-slim AS build
@@ -26,7 +26,9 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.war app.war
 
-COPY startup.sh /var/opt/mssql/startup.sh
-CMD ["bash", "/var/opt/mssql/startup.sh"]
+
+RUN chmod +x ./startup.sh
+
+CMD  exec /bin/bash startup.sh
 
 ENTRYPOINT ["java", "-jar", "app.war"]
