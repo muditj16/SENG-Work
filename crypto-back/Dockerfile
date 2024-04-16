@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/mssql/server AS sql-server-init
-ENV SA_PASSWORD a225034862650A
-ENV ACCEPT_EULA Y
-ENV MSSQL_PID Express
-ENV MSSQL_DATABASE ucrypt
-RUN (/opt/mssql-tools/bin/sqlcmd -U sa -P $SA_PASSWORD -Q "CREATE DATABASE ucrypt")
+#FROM mcr.microsoft.com/mssql/server AS sql-server-init
+#ENV SA_PASSWORD a225034862650A
+#ENV ACCEPT_EULA Y
+#ENV MSSQL_PID Express
+#ENV MSSQL_DATABASE ucrypt
+#RUN (/opt/mssql-tools/bin/sqlcmd -U sa -P $SA_PASSWORD -Q "CREATE DATABASE ucrypt")
 
 # Build stage
 FROM maven:3.8.4-openjdk-17-slim AS build
