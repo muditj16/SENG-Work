@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/mssql/server AS sql-server-init
 ENV SA_PASSWORD a225034862650A
 ENV ACCEPT_EULA Y
 ENV MSSQL_PID Express
-ENV MSSQL_DATABASE ucrypt
+ENV DB_NAME ucrypt
 RUN (/opt/mssql-tools/bin/sqlcmd -U sa -P $SA_PASSWORD -Q "CREATE DATABASE ucrypt")
 
 # Build stage
@@ -25,5 +25,8 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 COPY --from=build /app/target/*.war app.war
+
+COPY startup.sh /var/opt/mssql/startup.sh
+CMD ["bash", "/var/opt/mssql/startup.sh"]
 
 ENTRYPOINT ["java", "-jar", "app.war"]
