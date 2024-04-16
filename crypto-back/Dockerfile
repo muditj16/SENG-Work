@@ -26,9 +26,7 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.war app.war
 
-#COPY startup.sh /var/opt/mssql/startup.sh
-#RUN chmod +x startup.sh
+COPY startup.sh /app/startup.sh
+RUN chmod +x /app/startup.sh
 
-CMD ["bash", "ls"]
-
-ENTRYPOINT ["startup.sh"]
+ENTRYPOINT ["/app/startup.sh"]
