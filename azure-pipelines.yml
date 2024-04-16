@@ -34,31 +34,27 @@ jobs:
       mavenOptions: '-Xmx3072m'
     displayName: 'Maven Package Backend'
 
-- job: FrontendBuild
-  displayName: 'Build Frontend'
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '16.x'
-    displayName: 'Install Node.js'
+# - job: FrontendBuild
+#   displayName: 'Build Frontend'
+#   steps:
+#   - task: NodeTool@0
+#     inputs:
+#       versionSpec: '16.x'
+#     displayName: 'Install Node.js'
   
-  - script: |
-      cd UCryptPortal
-      npm install
-      npm install -g @angular/cli@15.0.1
-      ng build --configuration=docker
-    displayName: 'Build Angular App'
+#   - script: |
+#       cd UCryptPortal
+#       npm install
+#       npm install -g @angular/cli@15.0.1
+#       ng build --configuration=docker
+#     displayName: 'Build Angular App'
 
 - job: DockerImageBuild
   displayName: 'Build Docker Images'
   dependsOn: 
     - BackendBuild
-    - FrontendBuild
+#    - FrontendBuild
   steps:
- # - task: Docker@2
-  #  inputs:
-  #    containerRegistry: 'dockerHubReg'
-  #    command: 'login'
   - task: Docker@2
     inputs:
       containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
@@ -67,15 +63,6 @@ jobs:
       Dockerfile: 'crypto-back/Dockerfile'
       tags: 'latest'
     displayName: 'Build Backend Docker Image'
-
-  # - task: Docker@2
-  #   inputs:
-  #     containerRegistry: 'dockerHubReg' ## TODO Azure Container Registry 
-  #     repository: 'itraore/ucrypt.docker'
-  #     command: 'buildAndPush'
-  #     Dockerfile: 'UCryptPortal/Dockerfile'
-  #     tags: 'latest'
-  #   displayName: 'Build Frontend Docker Image'
 
   - task: Docker@2
     inputs:
