@@ -29,6 +29,4 @@ COPY --from=build /app/target/*.war app.war
 COPY startup.sh /var/opt/mssql/startup.sh
 RUN chmod +x /var/opt/mssql/startup.sh
 
-CMD  exec /bin/bash /var/opt/mssql/startup.sh
-
-ENTRYPOINT ["java", "-jar", "app.war"]
+ENTRYPOINT ["/var/opt/mssql/startup.sh"]
