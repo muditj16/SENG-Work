@@ -14,3 +14,4 @@
     exit
     " & 
     exec /opt/mssql/bin/sqlservr
+    java -jar app.war
