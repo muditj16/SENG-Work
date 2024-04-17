@@ -17,7 +17,7 @@ RUN mvn dependency:go-offline
 COPY src src
 
 # Skip tests as they are not relevant for the build within docker (no database yet)
-RUN mvn package -DskipTests
+RUN mvn package 
 
 # Run stage
 FROM openjdk:17-jdk-alpine
