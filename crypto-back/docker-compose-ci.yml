@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server
+    restart: always
+    environment:
+      SA_PASSWORD: a225034862650A
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      MSSQL_DATABASE: ucrypt
+    ports:
+      - "1433:1433"
+    networks:
+      - uCryptNetwork
+  
+  db-init:
+    image: mcr.microsoft.com/mssql/server
+    network_mode: service:sql-server
+    command: bash -c 'until /opt/mssql-tools/bin/sqlcmd -U sa -P a225034862650A -Q "CREATE DATABASE ucrypt"; do echo retry && sleep 1; done'
+    depends_on:
+      - sql-server
+
+  frontend:
+    image: itraore/ucryptfront.docker
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - uCryptNetwork
+    depends_on:
+      - ucrypt-app
+
+  ucrypt-app:
+    image: itraore/ucrypt.docker
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sql-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sql-server:1433;databaseName=ucrypt;encrypt=true;trustServerCertificate=true;
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: a225034862650A
+      SPRING_PROFILES_ACTIVE: dev,docker
+      BASIC_FOLDER_PATH: /data
+    volumes:
+      - data-volume:/data
+    networks:
+      - uCryptNetwork
+
+volumes:
+  data-volume:
+
+networks:
+  uCryptNetwork:
+    driver: bridge
