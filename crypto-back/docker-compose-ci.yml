@@ -22,7 +22,7 @@ services:
       - sql-server
 
   frontend:
-    image: itraore/ucryptfront.docker
+    image: itraore/ucrypt.front
     restart: always
     ports:
       - "80:80"
@@ -32,7 +32,7 @@ services:
       - ucrypt-app
 
   ucrypt-app:
-    image: itraore/ucrypt.docker
+    image: itraore/ucrypt.back
     restart: always
     ports:
       - "8080:8080"
