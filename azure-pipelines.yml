@@ -46,8 +46,8 @@ jobs:
   steps:
   - task: Docker@2
     inputs:
-      containerRegistry: 'dockerHubReg' 
-      repository: 'itraore/ucrypt.docker'
+      containerRegistry: 'DocHubBack' 
+      repository: 'itraore/ucrypt.back'
       command: 'buildAndPush'
       Dockerfile: 'crypto-back/Dockerfile'
       tags: 'latest'
@@ -55,8 +55,8 @@ jobs:
 
   - task: Docker@2
     inputs:
-      containerRegistry: 'dockerHubFront' 
-      repository: 'itraore/ucryptfront.docker'
+      containerRegistry: 'DocHubFront' 
+      repository: 'itraore/ucrypt.front'
       command: 'buildAndPush'
       Dockerfile: 'UCryptPortal/Dockerfile'
       tags: 'latest'
