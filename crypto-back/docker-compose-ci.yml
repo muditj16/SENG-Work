@@ -22,7 +22,7 @@ services:
       - sql-server
 
   frontend:
-    image: itraore/ucrypt.front
+    image: xxx/yyy.front
     restart: always
     ports:
       - "80:80"
@@ -32,7 +32,7 @@ services:
       - ucrypt-app
 
   ucrypt-app:
-    image: itraore/ucrypt.back
+    image: xxx/yyy.back
     restart: always
     ports:
       - "8080:8080"
