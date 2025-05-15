@@ -4,6 +4,7 @@ Assignment 2 - CSC 305
 
 Description:
 This scene shows Earth orbiting the Sun with the Moon orbiting Earth. Suddenly, an asteroid crashes into Earth. The impact causes both Earth and the Moon to explode. This scene also features a three level hierarchical object (ufo) moving in space. I have used lab 7 code as template and have referred to Illuminations lecture pdf for fragment shader.
+![Mudit_Jaswal_image](https://github.com/user-attachments/assets/6a608993-8430-4581-9ff9-c37d595d7fde)
 
 
 Working
@@ -18,7 +19,11 @@ Working
 4.There are multiple textures either procedural or mapped. For example, sun, earth, ufo, stars.
 
 5. Completed in HTML file. 
--Convert the ADS shader in the assignment base code from a vertex shader to a fragment shader. You need to compute the lighting equation per fragment.
+-Convert the ADS shader in the assignment base code from 
+
+https://github.com/user-attachments/assets/b8de2641-a575-4f3b-8c63-ff134e89b8ed
+
+a vertex shader to a fragment shader. You need to compute the lighting equation per fragment.
 
 6.Completed in HTML file.
 -Convert the Phong to Blinn-Phong in the new fragment shader created in step 3.
