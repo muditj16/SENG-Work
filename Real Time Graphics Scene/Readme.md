@@ -4,6 +4,7 @@ Assignment 2 - CSC 305
 
 Description:
 This scene shows Earth orbiting the Sun with the Moon orbiting Earth. Suddenly, an asteroid crashes into Earth. The impact causes both Earth and the Moon to explode. This scene also features a three level hierarchical object (ufo) moving in space. I have used lab 7 code as template and have referred to Illuminations lecture pdf for fragment shader.
+![Mudit_Jaswal_image](https://github.com/user-attachments/assets/6d30974d-8157-4299-a4c1-44958d11d329)
 
 
 Working
