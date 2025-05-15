@@ -5,6 +5,7 @@ Assignment 2 - CSC 305
 Description:
 This scene shows Earth orbiting the Sun with the Moon orbiting Earth. Suddenly, an asteroid crashes into Earth. The impact causes both Earth and the Moon to explode. This scene also features a three level hierarchical object (ufo) moving in space. I have used lab 7 code as template and have referred to Illuminations lecture pdf for fragment shader.
 
+
 Working
 1. UFO moving in space is atleast three level hierarchical object. 
 -At least one hierarchical object of at least three levels in the hierarchy  (e.g. human arm body -> shoulder -> elbow ...) where joint motion clearly shows the interaction between levels. A good example of this is the legs in A1, note that legs in A2 will not count (you can not simply use the legs to fulfill this requirement).
