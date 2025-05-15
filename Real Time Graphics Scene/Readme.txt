@@ -1,5 +1,4 @@
 Mudit Jaswal
-V00982906
 Assignment 2 - CSC 305	
 
 
