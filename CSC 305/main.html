@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
+
+
+    in vec4 vPosition; 
+    in vec3 vNormal;    
+    in vec2 vTexCoord;  
+    
+    out vec2 fTexCoord;  
+    out vec3 fNormal;    
+    out vec3 fPos;      
+    
+    uniform mat4 modelViewMatrix;
+    uniform mat4 normalMatrix;
+    uniform mat4 projectionMatrix;
+    
+    void main() {
+       
+        fNormal = normalize( (normalMatrix * vec4(vNormal, 0.0)).xyz );
+        fPos = (modelViewMatrix * vPosition).xyz;
+        fTexCoord = vTexCoord; 
+    
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    }
+    </script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">#version 300 es
+
+    precision mediump float;
+
+    uniform sampler2D map1;  // Color texture
+    uniform sampler2D starMap;    // Star texture for blinking effect
+    uniform int useTextures;      // Flag to enable or disable textures
+    uniform int stars;            // Flag to enable or disable blinking stars
+    uniform vec4 ambientProduct;  // Ambient lighting product
+    uniform vec4 diffuseProduct;  // Diffuse lighting product
+    uniform vec4 specularProduct; // Specular lighting product
+    uniform vec4 lightPosition;   // Light position in world space
+    uniform float shininess;      // Shininess factor
+    uniform float time;           // Time to control the blinking effect
+    
+    in vec2 fTexCoord;  // Texture coordinates from vertex shader
+    in vec3 fNormal;    // Normal from vertex shader
+    in vec3 fPos;       // Position from vertex shader
+    
+    out vec4 fragColor; // Final color of the fragment
+    
+    void main() {
+       
+        vec3 L = normalize(lightPosition.xyz - fPos);  // Light direction
+        vec3 N = normalize(fNormal);                    // Normal at fragment
+        vec3 V = normalize(-fPos);                      // View direction (camera at origin)
+        
+        // Blinn-Phong model: Calculate the half-vector (H)
+        vec3 H = normalize(L + V);  // Half-vector for Blinn-Phong model
+        
+       
+        float lightDotNormal = max(dot(L, N), 0.0);
+        vec4 diffuse = diffuseProduct * lightDotNormal;
+    
+        // Compute the specular term using the Blinn-Phong model
+        float lightDotHalfVector = max(dot(N, H), 0.0);
+        vec4 specular = specularProduct * pow(lightDotHalfVector, shininess);
+    
+        
+        vec4 ambient = ambientProduct;
+    
+        vec4 lighting = ambient + diffuse + specular;
+    
+        vec4 fragTexture = vec4(1.0, 1.0, 1.0, 1.0);  
+        if (useTextures == 1) {
+            fragTexture = texture(map1, fTexCoord);  
+        }
+    
+        vec4 colorWithLighting = fragTexture * lighting;
+    
+        fragColor = colorWithLighting;
+    
+        fragColor.a = 1.0;
+    
+        // If star effect is enabled, add blinking star texture
+        if (stars == 1) {
+            vec4 blinkTexture = texture(starMap, fTexCoord);
+            float blink = abs(cos(time * 2.0));  // Twinkle effect
+            fragColor = mix(fragColor, blinkTexture, blink);  // Mix textures for twinkle effect
+        }
+    }
+    </script>
+<script type="text/javascript" src="Common/webgl-utils.js"></script>
+<script type="text/javascript" src="Common/initShaders.js"></script>
+
+<script type="text/javascript" src="Common/MV.js"></script>
+<script type="text/javascript" src="objects.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<br/>
+<br/>
+<div id="animToggleButton">
+    <input id="animToggleButtoni" type="button" value="Toggle Animation"
+    />
+
+</div><br/>
+
+<div id="textureToggleButton">
+    <input id="textureToggleButtoni" type="button" value="Toggle Textures"/>
+</div>
+</body>
+</html>
