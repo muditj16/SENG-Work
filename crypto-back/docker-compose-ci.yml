@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   sql-server:
@@ -13,11 +13,11 @@ services:
       - "1433:1433"
     networks:
       - uCryptNetwork
-  
+
   db-init:
     image: mcr.microsoft.com/mssql/server
     network_mode: service:sql-server
-    command: bash -c 'until /opt/mssql-tools/bin/sqlcmd -U sa -P a225034862650A -Q "CREATE DATABASE ucrypt"; do echo retry && sleep 1; done'
+    command: bash -c 'until /opt/mssql-tools18/bin/sqlcmd -U sa -P a225034862650A -C -N -Q "CREATE DATABASE ucrypt"; do echo retry && sleep 1; done'
     depends_on:
       - sql-server
 
