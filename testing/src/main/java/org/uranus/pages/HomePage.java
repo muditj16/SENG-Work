@@ -2,6 +2,7 @@ package org.uranus.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.uranus.model.UserModel;
 
 public class HomePage extends PageBase {
     public HomePage(WebDriver webDriver) {
@@ -27,14 +28,14 @@ public class HomePage extends PageBase {
 
 
     //Method to sign up a user with the provided information.
-    public void signUp(String name , String email, String password, String confPassword, String role) {
-    click(signUpBtn);
-    type(nameField,name);
-    type(emailField,email);
-    type(passField,password);
-    type(confirmPassField,confPassword);
-    select(roleField,role);
-    click(signUpSubmitBtn);
+    public void signUp(UserModel user) {
+        click(signUpBtn);
+        type(nameField, user.name);
+        type(emailField, user.email);
+        type(passField, user.password);
+        type(confirmPassField, user.password);
+        select(roleField, user.role);
+        click(signUpSubmitBtn);
     }
 
 
@@ -48,5 +49,9 @@ public class HomePage extends PageBase {
 
     public void openAdminPanel(){
         click(adminPanelModule);
+    }
+
+    public void closeToastMsg() {
+        click(closeToastMsg);
     }
 }
