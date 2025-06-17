@@ -1,13 +1,14 @@
-package org.uranus.cucumber;
+package tests.cucumber;
+
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 // Configure Cucumber options using the @CucumberOptions annotation
 @CucumberOptions(
         // Specify the path to the feature files
-        features = "src/main/java/org/uranus/features",
+        features = "src/test/java/tests/features/UserRegistration.feature",
         // Specify the package containing the step definitions
-        glue = "stepDefinitions",
+        glue = "tests.stepDefinitions",
         
         // Specify the plugins for generating reports
         plugin = {"pretty", "html:target/cucumber-reports.html", "json:target/cucumber-reports.json"},

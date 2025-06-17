@@ -2,18 +2,24 @@ package org.uranus.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.uranus.model.UserModel;
+import org.uranus.driver.UranusDriver;
+import org.uranus.model.UserRegistrationModel;
 
 public class HomePage extends PageBase {
     public HomePage(WebDriver webDriver) {
         super(webDriver);
     }
 
+    public HomePage(UranusDriver uranusDriver) {
+        super(uranusDriver.webDriver);
+    }   
+
    // This defines a locators for a Elements in a webpage.
     By signUpBtn = By.cssSelector("#collapsibleNavId div a:first-child");
     By loginBtn = By.cssSelector(".btn-outline-secondary");
     By nameField = By.id("signUpName");
     By emailField = By.id("loginEmail");
+    public By invalidEmailError = By.cssSelector("#login > div > app-sign-up-page > div > div.modal-body > form > div:nth-child(2) > div");
     By passField = By.id("loginPassword");
     By confirmPassField = By.id("signUpConfirmPassword");
     By roleField = By.id("signUpRole");
@@ -24,16 +30,16 @@ public class HomePage extends PageBase {
    By passwordLoginField=By.cssSelector("app-header #signUp app-login-page .auth-form #loginPassword");
    By loginSubmitBtn=By.cssSelector("app-header #signUp app-login-page .auth-form button");
    By adminPanelModule=By.cssSelector("div #collapsibleNavId ul li:nth-child(8) a");
-
-
+    By profileDropdown = By.id("#dropdownId");
+    By profileDropdownLogoutLink = By.cssSelector("#collapsibleNavId > div > ul > li > div > a:nth-child(2)");
 
     //Method to sign up a user with the provided information.
-    public void signUp(UserModel user) {
+    public void signUp(UserRegistrationModel user) {
         click(signUpBtn);
         type(nameField, user.name);
         type(emailField, user.email);
         type(passField, user.password);
-        type(confirmPassField, user.password);
+        type(confirmPassField, user.confirmPassword);
         select(roleField, user.role);
         click(signUpSubmitBtn);
     }
@@ -53,5 +59,10 @@ public class HomePage extends PageBase {
 
     public void closeToastMsg() {
         click(closeToastMsg);
+    }
+
+    public void logout() {
+        click(profileDropdown);
+        click(profileDropdownLogoutLink);
     }
 }

@@ -1,6 +1,7 @@
 package org.uranus.data;
 
 import org.uranus.model.UserModel;
+import org.uranus.model.UserRegistrationModel;
 
 public class UranusFaker {
     public static String getRandomEmail() {
@@ -13,6 +14,33 @@ public class UranusFaker {
 
     public static String getRandomName() {
         return "User" + System.currentTimeMillis();
+    }
+
+    public static UserRegistrationModel getRandomBaseUserRegistration() {
+        UserRegistrationModel user = new UserRegistrationModel();
+        user.email = getRandomEmail();
+        user.password = getRandomPassword();
+        user.name = getRandomName();
+        user.confirmPassword = user.password; // Confirm password should match
+        return user;
+    }
+
+    public static UserRegistrationModel getRandomUserRegistration() {
+        UserRegistrationModel user = getRandomBaseUserRegistration();
+        user.role = "USER";
+        return user;
+    }
+
+    public static UserRegistrationModel getRandomAdminRegistration() {
+        UserRegistrationModel user = getRandomBaseUserRegistration();
+        user.role = "ADMIN";
+        return user;
+    }
+
+    public static UserRegistrationModel getRandomEmployeeRegistration() {
+        UserRegistrationModel user = getRandomBaseUserRegistration();
+        user.role = "EMPLOYEE";
+        return user;
     }
 
     private static UserModel getRandomBaseUser() {
