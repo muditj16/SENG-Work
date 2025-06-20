@@ -51,7 +51,11 @@ public class UranusDriver {
 
     //make this enter password into password field fucntion
     public String enterText(String password, By by) {
-
-	
+        webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+        webDriverWait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfElementLocated(by)));
+        webElement = webDriver.findElement(by);
+        webElement.clear();
+        webElement.sendKeys(password);
+        return webElement.getAttribute("value");
     }
 }

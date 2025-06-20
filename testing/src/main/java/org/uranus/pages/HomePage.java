@@ -15,7 +15,7 @@ public class HomePage extends PageBase {
     By emailField = By.id("loginEmail");
     public By invalidEmailError = By.cssSelector("#login > div > app-sign-up-page > div > div.modal-body > form > div:nth-child(2) > div");
     //potentially will need to be public for future implementation
-    By passField = By.id("loginPassword");
+    public By passField = By.id("loginPassword");
     By confirmPassField = By.id("signUpConfirmPassword");
     By roleField = By.id("signUpRole");
     By signUpSubmitBtn = By.cssSelector("app-sign-up-page form .btn-submit");
