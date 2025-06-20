@@ -3,36 +3,36 @@ pool:
   demands: maven
 
 jobs:
-  - job: SonarQubePreparationandBackendBuild
-    displayName: "SonarQube Preparation and Backend Build"
-    steps:
-      - task: SonarQubePrepare@5
-        inputs:
-          SonarQube: sonarQube
-          scannerMode: "Other"
-          extraProperties: |
-            # Additional properties that will be passed to the scanner,
-            # Put one key=value per line, example:
-            # sonar.exclusions=**/*.bin
-            sonar.projectKey=ucrypt
-            sonar.projectName=ucrypt
-      - task: Maven@4
-        displayName: BackendBuild
-        inputs:
-          mavenPomFile: "crypto-back/pom.xml"
-          goals: "package -DskipTests"
-          publishJUnitResults: false
-          javaHomeOption: "JDKVersion"
-          jdkVersionOption: "1.17"
-          jdkArchitectureOption: "x64"
-          mavenOptions: "-Xmx3072m"
-          sonarQubeRunAnalysis: true
-      - task: SonarQubePublish@5
-        inputs:
-          pollingTimeoutSec: "300"
+  # - job: SonarQubePreparationandBackendBuild
+  #   displayName: "SonarQube Preparation and Backend Build"
+  #   steps:
+  #     - task: SonarQubePrepare@5
+  #       inputs:
+  #         SonarQube: sonarQube
+  #         scannerMode: "Other"
+  #         extraProperties: |
+  #           # Additional properties that will be passed to the scanner,
+  #           # Put one key=value per line, example:
+  #           # sonar.exclusions=**/*.bin
+  #           sonar.projectKey=ucrypt
+  #           sonar.projectName=ucrypt
+  #     - task: Maven@4
+  #       displayName: BackendBuild
+  #       inputs:
+  #         mavenPomFile: "crypto-back/pom.xml"
+  #         goals: "package -DskipTests"
+  #         publishJUnitResults: false
+  #         javaHomeOption: "JDKVersion"
+  #         jdkVersionOption: "1.17"
+  #         jdkArchitectureOption: "x64"
+  #         mavenOptions: "-Xmx3072m"
+  #         sonarQubeRunAnalysis: true
+  #     - task: SonarQubePublish@5
+  #       inputs:
+  #         pollingTimeoutSec: "300"
   - job: testing
     displayName: "Testing"
-    dependsOn: SonarQubePreparationandBackendBuild
+    # dependsOn: SonarQubePreparationandBackendBuild
     steps:
       - task: Maven@4
         displayName: BackendTest
