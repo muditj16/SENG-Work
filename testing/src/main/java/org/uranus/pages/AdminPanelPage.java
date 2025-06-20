@@ -25,18 +25,26 @@ public class AdminPanelPage extends PageBase {
     By btnEditRoleStaff = By.cssSelector("#staff tbody tr:nth-child(1) td:nth-child(6) button");
     By listStafRolesField = By.cssSelector("app-accounts .active .p-datatable-wrapper tbody tr:nth-child(1) td:nth-child(4) p-celleditor select");
     By saveEditIcon = By.cssSelector("app-accounts .active .p-datatable-wrapper tbody tr:nth-child(1) td:nth-child(6) button:nth-child(1)");
-    By pendingRegistrationTable = By.id("pr_id_2-table");
+    By pendingRegistrationTable = By.cssSelector("table");
+    public By profileDropdown = By.cssSelector("#collapsibleNavId > div > ul > li");
+    public By profileDropdownLogoutLink = By.cssSelector("#collapsibleNavId > div > ul > li > div > a:nth-child(2)");
+    By newAccountsTab = By.id("new-tab");
+    By staffTab = By.id("staff-tab");
+    By registeredUsersTab = By.id("reg-tab");
+    By allUsersTab = By.id("All-tab");
 
     public void approveSignUpRequest(UserRegistrationModel user) {
+        click(newAccountsTab);
+
         WebElement registrationTable = webDriver.findElement(pendingRegistrationTable);
         for (WebElement row : registrationTable.findElements(By.cssSelector("tbody tr"))) {
             String emailText = row.findElement(By.cssSelector("td:nth-child(2) span")).getText();
+            System.out.println("Checking email: " + emailText);
             if (emailText.equals(user.email)) {
                 WebElement approveButton = row.findElement(approve);
                 approveButton.click();
             }
         }
-        click(approve);
     }
 
     public void editRole(String newRole) {
@@ -47,4 +55,8 @@ public class AdminPanelPage extends PageBase {
         click(saveEditIcon);
     }
 
+    public void logout() {
+        click(profileDropdown);
+        click(profileDropdownLogoutLink);
+    }
 }

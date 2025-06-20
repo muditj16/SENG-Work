@@ -36,8 +36,8 @@ public class UserRegistration {
   
     @Before
     public void refresh() {
-        user = UranusFaker.getRandomUserRegistration();
         webDriver.refresh();
+        user = UranusFaker.getRandomUserRegistration();
         homePage = new HomePage(webDriver);
     }
 
@@ -99,5 +99,35 @@ public class UserRegistration {
     @Then("I should get an error message saying that this email provided is invalid")
     public void i_should_get_an_error_message_saying_that_this_email_provided_is_invalid() {
         assertTextContentMatches(webDriver.getText(homePage.invalidEmailError), "Please enter a valid email!");
+    }
+
+    @Given("A new user has signed up")
+    public void a_new_user_has_signed_up() {
+        homePage.signUp(user);
+        assertTextContentMatches(webDriver.getText(homePage.toastMsg), "Registerd successfully, please wait for admin approval to login!");
+        homePage.closeToastMsg();
+    }
+
+    @When("An administrator logs in and navigates to the admin panel")
+    public void an_administrator_logs_in_and_navigates_to_the_admin_panel() {
+        homePage.login(LoadProperties.env.getProperty("ADMIN_EMAIL"), LoadProperties.env.getProperty("ADMIN_PASSWORD"));
+        homePage.closeToastMsg();
+
+        homePage.openAdminPanel();
+    }
+
+    @Then("The admin can locate the users registration request and accept it")
+    public void the_administrator_approves_the_new_user_registration() {
+        AdminPanelPage adminPanelPage = new AdminPanelPage(webDriver);
+        adminPanelPage.approveSignUpRequest(user);
+
+        homePage.logout();
+    }
+
+    @Then("The user should be able to log in")
+    public void the_user_should_be_able_to_log_in() {
+        homePage.login(user.email, user.password);
+        assertTextContentMatches(webDriver.getElement(homePage.toastMsg), "Successfully logged in!");
+        homePage.closeToastMsg();
     }
 }

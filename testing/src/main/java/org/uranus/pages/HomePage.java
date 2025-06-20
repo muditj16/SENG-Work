@@ -30,8 +30,8 @@ public class HomePage extends PageBase {
    By passwordLoginField=By.cssSelector("app-header #signUp app-login-page .auth-form #loginPassword");
    By loginSubmitBtn=By.cssSelector("app-header #signUp app-login-page .auth-form button");
    By adminPanelModule=By.cssSelector("div #collapsibleNavId ul li:nth-child(8) a");
-    By profileDropdown = By.id("#dropdownId");
-    By profileDropdownLogoutLink = By.cssSelector("#collapsibleNavId > div > ul > li > div > a:nth-child(2)");
+    public By profileDropdown = By.cssSelector("#collapsibleNavId>div>ul>li>a");
+    public By profileDropdownLogoutLink = By.cssSelector("#collapsibleNavId > div > ul > li > div > a:nth-child(2)");
 
     //Method to sign up a user with the provided information.
     public void signUp(UserRegistrationModel user) {

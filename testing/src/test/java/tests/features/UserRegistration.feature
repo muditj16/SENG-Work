@@ -4,6 +4,12 @@ Feature: User Registration
         When I enter all mandatory registration details correctly
         Then I should be able to register successfully and receive a confirmation email
 
+    Scenario: Successful User Registration approval
+        Given A new user has signed up
+        When An administrator logs in and navigates to the admin panel
+        Then The admin can locate the users registration request and accept it
+        Then The user should be able to log in
+
     Scenario: Unsuccessful User Sign Up with weak password
         Given I am a new user on the sign up page 
         When I enter weak password in the password field
