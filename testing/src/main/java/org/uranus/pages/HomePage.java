@@ -2,11 +2,17 @@ package org.uranus.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.uranus.driver.UranusDriver;
+import org.uranus.model.UserRegistrationModel;
 
 public class HomePage extends PageBase {
     public HomePage(WebDriver webDriver) {
         super(webDriver);
     }
+
+    public HomePage(UranusDriver uranusDriver) {
+        super(uranusDriver.webDriver);
+    }   
 
    // This defines a locators for a Elements in a webpage.
     By signUpBtn = By.cssSelector("#collapsibleNavId div a:first-child");
@@ -25,18 +31,18 @@ public class HomePage extends PageBase {
    By passwordLoginField=By.cssSelector("app-header #signUp app-login-page .auth-form #loginPassword");
    By loginSubmitBtn=By.cssSelector("app-header #signUp app-login-page .auth-form button");
    By adminPanelModule=By.cssSelector("div #collapsibleNavId ul li:nth-child(8) a");
-
-
+    public By profileDropdown = By.cssSelector("#collapsibleNavId>div>ul>li>a");
+    public By profileDropdownLogoutLink = By.cssSelector("#collapsibleNavId > div > ul > li > div > a:nth-child(2)");
 
     //Method to sign up a user with the provided information.
-    public void signUp(String name , String email, String password, String confPassword, String role) {
-    click(signUpBtn);
-    type(nameField,name);
-    type(emailField,email);
-    type(passField,password);
-    type(confirmPassField,confPassword);
-    select(roleField,role);
-    click(signUpSubmitBtn);
+    public void signUp(UserRegistrationModel user) {
+        click(signUpBtn);
+        type(nameField, user.name);
+        type(emailField, user.email);
+        type(passField, user.password);
+        type(confirmPassField, user.confirmPassword);
+        select(roleField, user.role);
+        click(signUpSubmitBtn);
     }
 
 
@@ -50,5 +56,14 @@ public class HomePage extends PageBase {
 
     public void openAdminPanel(){
         click(adminPanelModule);
+    }
+
+    public void closeToastMsg() {
+        click(closeToastMsg);
+    }
+
+    public void logout() {
+        click(profileDropdown);
+        click(profileDropdownLogoutLink);
     }
 }
