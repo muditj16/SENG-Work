@@ -6,16 +6,16 @@ jobs:
   - job: BackendBuild
     displayName: "Backend Build"
     steps:
-      # - task: SonarQubePrepare@5
-      #   inputs:
-      #     SonarQube: sonarQube
-      #     scannerMode: "Other"
-      #     extraProperties: |
-      #       # Additional properties that will be passed to the scanner,
-      #       # Put one key=value per line, example:
-      #       # sonar.exclusions=**/*.bin
-      #       sonar.projectKey=ucrypt
-      #       sonar.projectName=ucrypt
+      - task: SonarQubePrepare@5
+        inputs:
+          SonarQube: sonarQube
+          scannerMode: "Other"
+          extraProperties: |
+            # Additional properties that will be passed to the scanner,
+            # Put one key=value per line, example:
+            # sonar.exclusions=**/*.bin
+            sonar.projectKey=SENG426_Group4
+            sonar.projectName=SENG426_Group4
       - task: Maven@4
         displayName: BackendBuild
         inputs:
@@ -26,10 +26,10 @@ jobs:
           jdkVersionOption: "1.17"
           jdkArchitectureOption: "x64"
           mavenOptions: "-Xmx3072m"
-          sonarQubeRunAnalysis: false
-      # - task: SonarQubePublish@5
-      #   inputs:
-      #     pollingTimeoutSec: "300"
+          sonarQubeRunAnalysis: true
+      - task: SonarQubePublish@5
+        inputs:
+          pollingTimeoutSec: "300"
   - job: FrontendBuild
     displayName: "Build Frontend"
     steps:
