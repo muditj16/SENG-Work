@@ -14,23 +14,47 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class UranusDriver {
 
+    private static UranusDriver instance;
     public WebDriver webDriver;
     WebDriverWait webDriverWait;
     WebElement webElement;
+    private boolean isSetup = false;
 
-    public void setup() {
-        WebDriverManager.chromedriver().setup();
-        webDriver = new ChromeDriver();
-        webDriver.navigate().to(LoadProperties.env.getProperty("URL"));
-        webDriver.manage().window().maximize();
+    private UranusDriver() {}
+
+    public static synchronized UranusDriver getInstance() {
+        if (instance == null) {
+            instance = new UranusDriver();
+        }
+        return instance;
+    }
+
+    public synchronized void setup() {
+        if (!isSetup) {
+            WebDriverManager.chromedriver().setup();
+            webDriver = new ChromeDriver();
+            webDriver.navigate().to(LoadProperties.env.getProperty("URL"));
+            webDriver.manage().window().maximize();
+            isSetup = true;
+        }
     }
 
     public void teardown() {
-        webDriver.close();
+        if (webDriver != null) {
+            webDriver.close();
+            webDriver = null;
+            isSetup = false;
+        }
     }
 
     public void refresh() {
-        webDriver.navigate().refresh();
+        if (webDriver != null) {
+            webDriver.navigate().refresh();
+        }
+    }
+
+    public void navigateToHome() {
+        webDriver.navigate().to(LoadProperties.env.getProperty("URL"));
     }
 
     public WebElement getElement(By by) {

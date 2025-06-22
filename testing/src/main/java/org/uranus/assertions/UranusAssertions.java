@@ -15,6 +15,18 @@ public class UranusAssertions {
         assertEquals(actualText, expectedText.strip(), "Text content does not match. Expected: '" + expectedText + "', but found: '" + actualText + "'");
     }
 
+    public static void assertIsValidKey(WebElement element) {
+        assertIsValidKey(element.getText());
+    }
+
+    public static void assertIsValidKey(String actualText) {
+        // Example regex for a valid key (16 to 32 alphanumeric characters)
+        String regex = "^[a-zA-Z0-9]{16,32}$";
+        if (!actualText.matches(regex)) {
+            throw new AssertionError("Key is not valid. Expected format: " + regex + ", but found: '" + actualText + "'");
+        }
+    }
+
     public static void assertPasswordStrength(WebElement element, String expectedStrength) {
         String actualStrength = element.getAttribute("value");
         assertEquals(actualStrength, expectedStrength.strip(), "Password strength does not match. Expected: '" + expectedStrength + "', but found: '" + actualStrength + "'");

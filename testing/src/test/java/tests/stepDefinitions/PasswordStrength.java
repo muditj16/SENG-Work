@@ -3,11 +3,9 @@ package tests.stepDefinitions;
 
 import static org.uranus.assertions.UranusAssertions.assertTextContentMatches;
 
-import org.uranus.configuration.LoadProperties;
 import org.uranus.data.UranusFaker;
 import org.uranus.driver.UranusDriver;
 import org.uranus.model.UserRegistrationModel;
-import org.uranus.pages.AdminPanelPage;
 import org.uranus.pages.HomePage;
 
 import io.cucumber.java.AfterAll;
@@ -26,7 +24,7 @@ public class PasswordStrength {
 
     @BeforeAll
     public static void setup() {
-        webDriver = new UranusDriver();
+        webDriver = UranusDriver.getInstance();
         webDriver.setup();
     }
 

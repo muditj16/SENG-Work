@@ -25,7 +25,7 @@ public class UserRegistration {
 
     @BeforeAll
     public static void setup() {
-        webDriver = new UranusDriver();
+        webDriver = UranusDriver.getInstance();
         webDriver.setup();
     }
 

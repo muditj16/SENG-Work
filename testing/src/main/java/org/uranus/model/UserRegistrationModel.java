@@ -1,5 +1,8 @@
 package org.uranus.model;
 
+import lombok.Builder;
+
+@Builder
 public class UserRegistrationModel {
     public String name;
     public String email;

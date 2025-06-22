@@ -1,7 +1,11 @@
 package org.uranus.model;
 
-//currently no use, might add be helpful later
+import lombok.Builder;
+
+import lombok.Builder;
+
 // Represent a user in the Uranus system during testing
+@Builder
 public class UserModel {
     public String password;
     public String email;

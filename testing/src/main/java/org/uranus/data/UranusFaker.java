@@ -17,55 +17,82 @@ public class UranusFaker {
     }
 
     public static UserRegistrationModel getRandomBaseUserRegistration() {
-        UserRegistrationModel user = new UserRegistrationModel();
-        user.email = getRandomEmail();
-        user.password = getRandomPassword();
-        user.name = getRandomName();
-        user.confirmPassword = user.password; // Confirm password should match
-        return user;
+        return UserRegistrationModel.builder()
+                .email(getRandomEmail())
+                .password(getRandomPassword())
+                .name(getRandomName())
+                .confirmPassword(getRandomPassword()) // Will be overwritten below
+                .build();
     }
 
     public static UserRegistrationModel getRandomUserRegistration() {
         UserRegistrationModel user = getRandomBaseUserRegistration();
-        user.role = "USER";
-        return user;
+        return UserRegistrationModel.builder()
+                .email(user.email)
+                .password(user.password)
+                .name(user.name)
+                .confirmPassword(user.password) // Confirm password should match
+                .role("USER")
+                .build();
     }
 
     public static UserRegistrationModel getRandomAdminRegistration() {
         UserRegistrationModel user = getRandomBaseUserRegistration();
-        user.role = "ADMIN";
-        return user;
+        return UserRegistrationModel.builder()
+                .email(user.email)
+                .password(user.password)
+                .name(user.name)
+                .confirmPassword(user.password)
+                .role("ADMIN")
+                .build();
     }
 
     public static UserRegistrationModel getRandomEmployeeRegistration() {
         UserRegistrationModel user = getRandomBaseUserRegistration();
-        user.role = "EMPLOYEE";
-        return user;
+        return UserRegistrationModel.builder()
+                .email(user.email)
+                .password(user.password)
+                .name(user.name)
+                .confirmPassword(user.password)
+                .role("EMPLOYEE")
+                .build();
     }
 
     private static UserModel getRandomBaseUser() {
-        UserModel user = new UserModel();
-        user.email = getRandomEmail();
-        user.password = getRandomPassword();
-        user.name = getRandomName();
-        return user;
+        return UserModel.builder()
+                .email(getRandomEmail())
+                .password(getRandomPassword())
+                .name(getRandomName())
+                .build();
     }
     
     public static UserModel getRandomUser() {
         UserModel user = getRandomBaseUser();
-        user.role = "USER";
-        return user;
+        return UserModel.builder()
+                .email(user.email)
+                .password(user.password)
+                .name(user.name)
+                .role("USER")
+                .build();
     }
 
     public static UserModel getRandomAdmin() {
         UserModel user = getRandomBaseUser();
-        user.role = "ADMIN";
-        return user;
+        return UserModel.builder()
+                .email(user.email)
+                .password(user.password)
+                .name(user.name)
+                .role("ADMIN")
+                .build();
     }
 
     public static UserModel getRandomEmployee() {
         UserModel user = getRandomBaseUser();
-        user.role = "EMPLOYEE";
-        return user;
+        return UserModel.builder()
+                .email(user.email)
+                .password(user.password)
+                .name(user.name)
+                .role("EMPLOYEE")
+                .build();
     }
 }

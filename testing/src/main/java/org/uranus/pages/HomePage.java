@@ -39,6 +39,10 @@ public class HomePage extends PageBase {
     public By profileDropdown = By.cssSelector("#collapsibleNavId>div>ul>li>a");
     public By profileDropdownLogoutLink = By.cssSelector("#collapsibleNavId > div > ul > li > div > a:nth-child(2)");
 
+    public By tryUcryptDropdown = By.cssSelector("#collapsibleNavId > ul > li.nav-item.dropdown.ng-star-inserted>a");
+    public By tryUcryptDropdownEncryptionLink = By.cssSelector("#collapsibleNavId > ul > li.nav-item.dropdown.ng-star-inserted > div > a:nth-child(1)");
+    public By tryUcryptDropdownDecryptionLink = By.cssSelector("#collapsibleNavId > ul > li.nav-item.dropdown.ng-star-inserted > div > a:nth-child(2)");
+
     //Method to sign up a user with the provided information.
     public void signUp(UserRegistrationModel user) {
         click(signUpBtn);
@@ -94,5 +98,15 @@ public class HomePage extends PageBase {
     public void logout() {
         click(profileDropdown);
         click(profileDropdownLogoutLink);
+    }
+
+    public void openEncryptionPage() {
+        click(tryUcryptDropdown);
+        click(tryUcryptDropdownEncryptionLink);
+    }
+
+    public void openDecryptionPage() {
+        click(tryUcryptDropdown);
+        click(tryUcryptDropdownDecryptionLink);
     }
 }
