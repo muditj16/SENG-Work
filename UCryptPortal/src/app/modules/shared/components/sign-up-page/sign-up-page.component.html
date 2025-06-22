@@ -53,6 +53,34 @@
               Password cannot exceed 24 characters!
             </div>
       </div>
+      <!-- Password Strength Meter -->
+      <!-- Password Strength Meter -->
+      <div *ngIf="signUpForm.get('password')?.value">
+        <div class="mb-2">
+          <label class="form-label mb-1">Password Strength</label>
+          <div class="progress" style="height: 8px;">
+            <div
+              class="progress-bar"
+              [ngClass]="{
+                'bg-danger': passwordStrengthLabel === 'Weak',
+                'bg-warning': passwordStrengthLabel === 'Medium',
+                'bg-success': passwordStrengthLabel === 'Strong',
+                'bg-info': passwordStrengthLabel === 'Super Strong'
+              }"
+              [style.width.%]="
+                passwordStrengthLabel === 'Weak' ? 25 :
+                passwordStrengthLabel === 'Medium' ? 50 :
+                passwordStrengthLabel === 'Strong' ? 80 :
+                passwordStrengthLabel === 'Super Strong' ? 100 : 0
+              "
+            ></div>
+          </div>
+          <small class="text-muted">
+            {{ passwordStrengthLabel }}
+          </small>
+        </div>
+      </div>
+
       <!-- Confirm Password -->
       <div class="mb-3">
         <label for="" class="form-label mb-0">Confirm Password<span class="primary-txt">*</span></label>
@@ -93,12 +121,13 @@
 
       <!-- No Account!! Login Link -->
       <div class="pt-4">
-        <span class="fs-14 text-mutued">Already have an account?
+        <span class="fs-14 text-mutued">Already have an account why doesn't this update?
           <a class="redirect-auth" data-bs-toggle="modal" data-bs-target="#signUp">Login Now</a>
         </span>
       </div>
 
     </form>
+
 
 
   </div>

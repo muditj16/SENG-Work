@@ -1,5 +1,6 @@
 package org.uranus.model;
 
+//currently no use, might add be helpful later
 // Represent a user in the Uranus system during testing
 public class UserModel {
     public String password;

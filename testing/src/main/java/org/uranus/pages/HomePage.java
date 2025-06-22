@@ -2,16 +2,21 @@ package org.uranus.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.uranus.driver.UranusDriver;
 import org.uranus.model.UserRegistrationModel;
 
 public class HomePage extends PageBase {
+    protected WebDriver driver;
+
     public HomePage(WebDriver webDriver) {
         super(webDriver);
+        this.driver = webDriver;
     }
 
     public HomePage(UranusDriver uranusDriver) {
         super(uranusDriver.webDriver);
+        this.driver = uranusDriver.webDriver;
     }   
 
    // This defines a locators for a Elements in a webpage.
@@ -20,7 +25,8 @@ public class HomePage extends PageBase {
     By nameField = By.id("signUpName");
     By emailField = By.id("loginEmail");
     public By invalidEmailError = By.cssSelector("#login > div > app-sign-up-page > div > div.modal-body > form > div:nth-child(2) > div");
-    By passField = By.id("loginPassword");
+    //potentially will need to be public for future implementation
+    public By passField = By.id("loginPassword");
     By confirmPassField = By.id("signUpConfirmPassword");
     By roleField = By.id("signUpRole");
     By signUpSubmitBtn = By.cssSelector("app-sign-up-page form .btn-submit");
@@ -44,6 +50,30 @@ public class HomePage extends PageBase {
         click(signUpSubmitBtn);
     }
 
+    public void enterPassword(String password) {
+        click(signUpBtn);
+        type(nameField, "Test User");
+        type(emailField, "test@example.com");
+        type(passField, password);
+    }
+
+    public String getPasswordStrengthLabel() {
+        // Adjust selector as needed to match your HTML
+        WebElement label = driver.findElement(By.cssSelector(".progress ~ small.text-muted"));
+        return label.getText().trim();
+    }
+
+    public String getPasswordStrengthBarColor() {
+        // Adjust selector as needed to match your HTML
+        WebElement bar = driver.findElement(By.cssSelector(".progress-bar"));
+        String classAttr = bar.getAttribute("class");
+        // Map class to color
+        if (classAttr.contains("bg-danger")) return "red";
+        if (classAttr.contains("bg-warning")) return "yellow";
+        if (classAttr.contains("bg-success")) return "green";
+        if (classAttr.contains("bg-info")) return "blue";
+        return "unknown";
+    }
 
     //Method to log in a user with the provided information.
     public void login(String email, String password){

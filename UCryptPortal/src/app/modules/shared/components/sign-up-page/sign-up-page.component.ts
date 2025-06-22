@@ -68,7 +68,43 @@ export class SignUpPageComponent implements OnInit{
     });
   }
 
+  private passwordStrength(c: AbstractControl): string {
+    const password = c.get('password');
+    // check length of password
+    let strength = "Weak";
+    if (!password || typeof password.value !== 'string') {
+      return strength;
+    }
+    if (password.value.length < 6) {  
+      return strength;
+    }
+    if (password.value.length >= 6 && password.value.length < 12) {
+      strength = 'Medium';
+      return strength;
+    }
+    if (
+      password.value.length >= 12 &&
+            (/[A-Z]/.test(password.value) &&
+      /[0-9]/.test(password.value) &&
+      /[^A-Za-z0-9]/.test(password.value)) == false
+    ) {
+      return "Strong";
+    }
+    // "SuperStrong" if password has length >= 12 and contains uppercase, number, and special char (order doesn't matter)
+    if (
+      password.value.length >= 12 &&
+      /[A-Z]/.test(password.value) &&
+      /[0-9]/.test(password.value) &&
+      /[^A-Za-z0-9]/.test(password.value)
+    ) {
+      return "Super Strong";
+    }
+    return strength;
+  }
 
+get passwordStrengthLabel(): string {
+  return this.passwordStrength(this.signUpForm);
+}
 
   private passwordConfirming(c: AbstractControl): { mismatch: boolean } | null {
     if (c.get('password')?.value !== c.get('confirmPassword')?.value) {
