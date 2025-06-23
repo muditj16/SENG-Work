@@ -81,6 +81,12 @@ public class PageBase {
         select = new Select(webDriver.findElement(by));
         select.selectByValue(value);
     }
+    public WebElement findElement(By locator) {
+        return webDriver.findElement(locator);
+    }
 
+    protected List<WebElement> findElements(By locator) {
+        return webDriver.findElements(locator);
+    }
 
 }

@@ -13,7 +13,7 @@ COPY src src
 RUN mvn package -DskipTests
 
 # Run stage
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-oracle
 
 WORKDIR /app
 

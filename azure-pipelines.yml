@@ -1,23 +1,17 @@
+trigger:
+  - main
+
+pr:
+  - main
+
 pool:
-  name: Azure Pipelines
-  demands: maven
+  vmImage: "ubuntu-latest"
 
 jobs:
   - job: BackendBuild
-    displayName: "Backend Build"
+    displayName: "Build Backend"
     steps:
-      - task: SonarQubePrepare@5
-        inputs:
-          SonarQube: sonarQube
-          scannerMode: "Other"
-          extraProperties: |
-            # Additional properties that will be passed to the scanner,
-            # Put one key=value per line, example:
-            # sonar.exclusions=**/*.bin
-            sonar.projectKey=SENG426_Group4
-            sonar.projectName=SENG426_Group4
-      - task: Maven@4
-        displayName: BackendBuild
+      - task: Maven@3
         inputs:
           mavenPomFile: "crypto-back/pom.xml"
           goals: "package -DskipTests"
@@ -25,11 +19,10 @@ jobs:
           javaHomeOption: "JDKVersion"
           jdkVersionOption: "1.17"
           jdkArchitectureOption: "x64"
+          cleanPackageCache: true
           mavenOptions: "-Xmx3072m"
-          sonarQubeRunAnalysis: true
-      - task: SonarQubePublish@5
-        inputs:
-          pollingTimeoutSec: "300"
+        displayName: "Maven Package Backend"
+
   - job: FrontendBuild
     displayName: "Build Frontend"
     steps:
@@ -53,8 +46,8 @@ jobs:
     steps:
       - task: Docker@2
         inputs:
-          containerRegistry: "ucrypt_back_DR"
-          repository: "sleepsleep1000/backend"
+          containerRegistry: "DocHubBack"
+          repository: "xxx/yyy.back"
           command: "buildAndPush"
           Dockerfile: "crypto-back/Dockerfile"
           tags: "latest"
@@ -62,8 +55,8 @@ jobs:
 
       - task: Docker@2
         inputs:
-          containerRegistry: "ucrypt_front_DR"
-          repository: "sleepsleep1000/frontend"
+          containerRegistry: "DocHubFront"
+          repository: "xxx/zzz.front"
           command: "buildAndPush"
           Dockerfile: "UCryptPortal/Dockerfile"
           tags: "latest"

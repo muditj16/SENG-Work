@@ -29,4 +29,8 @@ export class FileService {
     let RequestBody = {"filePath": filePath}; 
     return this.http.put<File>(this.baseUrl +`/download`, RequestBody, httpOptions);
   }
+
+  deleteFile(filePath: string) {
+    return this.http.delete<any>(`${this.baseUrl}/${filePath}`);
+  }
 }

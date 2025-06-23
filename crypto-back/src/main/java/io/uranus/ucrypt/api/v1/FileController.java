@@ -8,7 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -22,8 +22,7 @@ public class FileController extends AbstractController implements FilesApi {
     @Override
     public ResponseEntity<Void> createFile(final MultipartFile file) {
         this.fileService.createFile(file);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
@@ -41,5 +40,11 @@ public class FileController extends AbstractController implements FilesApi {
                 .header(TOTAL_COUNT_HEADER, String.valueOf(filesPage.getTotalElements()))
                 .header(TOTAL_PAGES_COUNT_HEADER, String.valueOf(filesPage.getTotalPages()))
                 .body(filesPage.getContent());
+    }
+
+    @DeleteMapping("/files/{filePath}")
+    public ResponseEntity<Void> deleteFile(@PathVariable String filePath) {
+        this.fileService.deleteFile(filePath);
+        return ResponseEntity.noContent().build();
     }
 }

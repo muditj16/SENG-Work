@@ -52,6 +52,37 @@ export class EncryptionComponent {
       encryptedText:['']
     })
   }
+  copykey(element: HTMLTextAreaElement) {
+    if (!element) return;
+
+    const value = element.value;
+
+    if (!value) {
+      this.messageService.add({severity:'warn', detail: 'Nothing to copy!'});
+      return;
+    }
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(value).then(() => {
+        this.messageService.add({severity:'success', detail: 'Copied to clipboard!'});
+      }).catch(() => {
+        this.messageService.add({severity:'error', detail: 'Copy failed!'});
+      });
+    } else {
+      element.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          this.messageService.add({severity:'success', detail: 'Copied to clipboard!'});
+        } else {
+          this.messageService.add({severity:'error', detail: 'Copy failed!'});
+        }
+      } catch {
+        this.messageService.add({severity:'error', detail: 'Copy failed!'});
+      }
+      window.getSelection()?.removeAllRanges();
+    }
+  }
 
   createForm(){
     this.form= this.fb.group({

@@ -2,8 +2,6 @@ package org.uranus.model;
 
 import lombok.Builder;
 
-import lombok.Builder;
-
 // Represent a user in the Uranus system during testing
 @Builder
 public class UserModel {

@@ -147,4 +147,19 @@ public class FileService {
         final var filesPage = this.fileRepository.findAll(specificationFrom, pageOf);
         return filesPage.map(this.fileMapper::map);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteFile(final String filePath) {
+        final var fileEntity = this.fileRepository.findByPath(filePath)
+                .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "File not found"));
+
+        try {
+            final var rootLocation = Paths.get(this.FILES_BASIC_FOLDER_PATH);
+            final Path file = rootLocation.resolve(filePath).normalize().toAbsolutePath();
+            Files.deleteIfExists(file);
+            this.fileRepository.delete(fileEntity);
+        } catch (final IOException e) {
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete file");
+        }
+    }
 }

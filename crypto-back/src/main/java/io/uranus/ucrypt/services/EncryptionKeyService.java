@@ -94,7 +94,7 @@ public class EncryptionKeyService {
         final var encryptionKeyValue = createEncryptionKeyResource.getValue();
         final var updateUserStatusQueryAsString = "INSERT INTO encryption_keys " +
                 "(created_at, updated_at, created_by_user_id, last_modified_by_user_id, user_id, value) " +
-                "VALUES (GETDATE(), GETDATE(), " + userId + ", " + userId + ", " + userId + ", '" + encryptionKeyValue + "');";
+                "VALUES (NOW(), NOW(), " + userId + ", " + userId + ", " + userId + ", '" + encryptionKeyValue + "');";
         final var updateUserStatusQuery = this.entityManager.createNativeQuery(updateUserStatusQueryAsString, User.class);
         updateUserStatusQuery.executeUpdate();
     }

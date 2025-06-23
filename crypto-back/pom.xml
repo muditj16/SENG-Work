@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -20,8 +20,8 @@
 		<mapstruct.version>1.5.3.Final</mapstruct.version>
 		<jjwt.version>0.11.5</jjwt.version>
 	</properties>
-	<dependencies>
 
+	<dependencies>
 		<!-- Spring Boot Starters -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -46,9 +46,18 @@
 			<artifactId>flyway-sqlserver</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.30</version>
 		</dependency>
 
 		<!-- JWT -->
@@ -63,7 +72,6 @@
 			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
@@ -71,7 +79,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- For OpenAPI generated code -->
+		<!-- OpenAPI -->
 		<dependency>
 			<groupId>org.openapitools</groupId>
 			<artifactId>jackson-databind-nullable</artifactId>
@@ -88,7 +96,7 @@
 			<version>2.2.6</version>
 		</dependency>
 
-		<!-- third party libraries -->
+		<!-- Third-party Libraries -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -116,7 +124,7 @@
 			<version>2.0.2.Final</version>
 		</dependency>
 
-		<!-- test -->
+		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -133,7 +141,7 @@
 			<version>2.10.5</version>
 		</dependency>
 
-		<!-- deployment -->
+		<!-- Deployment -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
@@ -141,8 +149,9 @@
 		</dependency>
 	</dependencies>
 
+
 	<build>
-		<finalName>${artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -242,8 +251,6 @@
 					<target>17</target>
 				</configuration>
 			</plugin>
-			
 		</plugins>
 	</build>
-
 </project>

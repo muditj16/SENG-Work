@@ -38,21 +38,14 @@ public class HomePage extends PageBase {
    By adminPanelModule=By.cssSelector("div #collapsibleNavId ul li:nth-child(8) a");
     public By profileDropdown = By.cssSelector("#collapsibleNavId>div>ul>li>a");
     public By profileDropdownLogoutLink = By.cssSelector("#collapsibleNavId > div > ul > li > div > a:nth-child(2)");
+   By uploadOptionSelect = By.cssSelector(".p-fileupload-upload");
+    By upload = By.cssSelector("p-button.p-element");
+    By homePageLink = By.cssSelector("a.nav-link[href='#/index']");
 
     public By tryUcryptDropdown = By.cssSelector("#collapsibleNavId > ul > li.nav-item.dropdown.ng-star-inserted>a");
     public By tryUcryptDropdownEncryptionLink = By.cssSelector("#collapsibleNavId > ul > li.nav-item.dropdown.ng-star-inserted > div > a:nth-child(1)");
-    public By tryUcryptDropdownDecryptionLink = By.cssSelector("#collapsibleNavId > ul > li.nav-item.dropdown.ng-star-inserted > div > a:nth-child(2)");
-
-    //Method to sign up a user with the provided information.
-    public void signUp(UserRegistrationModel user) {
-        click(signUpBtn);
-        type(nameField, user.name);
-        type(emailField, user.email);
-        type(passField, user.password);
-        type(confirmPassField, user.confirmPassword);
-        select(roleField, user.role);
-        click(signUpSubmitBtn);
-    }
+    public By tryUcryptDropdownDecryptionLink = By.cssSelector("#collapsibleNavId > ul > li.nav-item.dropdown.ng-star-inserted > div > a:nth-child(2)");    
+    By resourcesMenu = By.cssSelector("a.nav-link[href='#/resources']");
 
     public void enterPassword(String password) {
         click(signUpBtn);
@@ -78,7 +71,9 @@ public class HomePage extends PageBase {
         if (classAttr.contains("bg-info")) return "blue";
         return "unknown";
     }
-
+    public void openResourcesMenu() {
+        click(resourcesMenu);
+    }
     //Method to log in a user with the provided information.
     public void login(String email, String password){
         click(loginBtn);
@@ -95,10 +90,7 @@ public class HomePage extends PageBase {
         click(closeToastMsg);
     }
 
-    public void logout() {
-        click(profileDropdown);
-        click(profileDropdownLogoutLink);
-    }
+
 
     public void openEncryptionPage() {
         click(tryUcryptDropdown);
@@ -109,4 +101,31 @@ public class HomePage extends PageBase {
         click(tryUcryptDropdown);
         click(tryUcryptDropdownDecryptionLink);
     }
+    public void openChoose(){
+        click(uploadOptionSelect);
+    }
+    public void clickUpload(){
+        click(upload);
+    }
+    public void goToHomePage() {
+        click(homePageLink);
+    }
+    public void logout() {
+        click(profileDropdown);
+        click(profileDropdownLogoutLink);
+    }
+    public void clickCancelUpload() {
+        WebElement cancelBtn = webDriver.findElement(By.xpath("//p-fileupload//button[.//span[text()='Cancel']]"));
+        cancelBtn.click();
+    }
+    public void signUp(UserRegistrationModel user) {
+        click(signUpBtn);
+        type(nameField, user.name);
+        type(emailField, user.email);
+        type(passField, user.password);
+        type(confirmPassField, user.confirmPassword);
+        select(roleField, user.role);
+        click(signUpSubmitBtn);
+    }
+
 }

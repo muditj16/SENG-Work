@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
 public class File extends AuditedEntity {
 
     @NotBlank
@@ -36,6 +35,7 @@ public class File extends AuditedEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Builder
     public File(final String name, final String path, final String contentType, final User user) {
         this.name = name;
         this.path = path;

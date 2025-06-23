@@ -93,7 +93,7 @@
                       <!-- Copy & Save Buttons -->
                       <div class="enc-key-options">
                         <!-- Copy Button -->
-                        <button type="button" class="btn" pTooltip="Copy Text" tooltipPosition="top">
+                          <button type="button" class="btn" pTooltip="Copy Text" tooltipPosition="top">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20.208" height="23.009" viewBox="0 0 20.208 23.009">
                             <path id="Icon_awesome-copy" data-name="Icon awesome-copy"
                               d="M14.005,19.608v1.751a1.05,1.05,0,0,1-1.05,1.05H1.05A1.05,1.05,0,0,1,0,21.358V5.252A1.05,1.05,0,0,1,1.05,4.2H4.2V17.157a2.454,2.454,0,0,0,2.451,2.451Zm0-15.056V0H6.653A1.05,1.05,0,0,0,5.6,1.05V17.157a1.05,1.05,0,0,0,1.05,1.05h11.9a1.05,1.05,0,0,0,1.05-1.05V5.6H15.056A1.053,1.053,0,0,1,14.005,4.552ZM19.3,3.194,16.414.308A1.05,1.05,0,0,0,15.671,0h-.265V4.2h4.2V3.936a1.05,1.05,0,0,0-.308-.743Z"
@@ -238,7 +238,7 @@
               </label>
               <div class="enc-group">
                 <!-- Textarea KEY -->
-                <textarea class="form-control no-resize fs-10" placeholder="Enter Base64 Encoded key" formControlName="encryptionKeySelected"
+                <textarea #keyField class="form-control no-resize fs-10" placeholder="Enter Base64 Encoded key" formControlName="encryptionKeySelected"
                 [ngClass]="{
                   'is-invalid':
                   submitted && form.get('encryptionKeySelected')?.errors}" id="" rows="3">
@@ -251,7 +251,7 @@
                 <!-- Copy & Save Buttons -->
                 <div class="enc-key-options">
                   <!-- Copy Button -->
-                  <button type="button" class="btn" pTooltip="Copy Text" tooltipPosition="top">
+                  <button type="button" class="btn" pTooltip="Copy Text" tooltipPosition="top" (click)="copykey(keyField)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20.208" height="23.009" viewBox="0 0 20.208 23.009">
                       <path id="Icon_awesome-copy" data-name="Icon awesome-copy"
                         d="M14.005,19.608v1.751a1.05,1.05,0,0,1-1.05,1.05H1.05A1.05,1.05,0,0,1,0,21.358V5.252A1.05,1.05,0,0,1,1.05,4.2H4.2V17.157a2.454,2.454,0,0,0,2.451,2.451Zm0-15.056V0H6.653A1.05,1.05,0,0,0,5.6,1.05V17.157a1.05,1.05,0,0,0,1.05,1.05h11.9a1.05,1.05,0,0,0,1.05-1.05V5.6H15.056A1.053,1.053,0,0,1,14.005,4.552ZM19.3,3.194,16.414.308A1.05,1.05,0,0,0,15.671,0h-.265V4.2h4.2V3.936a1.05,1.05,0,0,0-.308-.743Z"
@@ -289,11 +289,11 @@
             <!-- Output -->
             <div class="enc-group">
               <!-- Textarea Output -->
-              <textarea class="form-control no-resize fs-10 output" name="" formControlName="decryptedText" id="" rows="4"></textarea>
+              <textarea #keyfield class="form-control no-resize fs-10 output" name="" formControlName="decryptedText" id="" rows="4"></textarea>
 
               <!-- Copy Button -->
               <div class="enc-key-options">
-                <button type="button" class="btn" pTooltip="Copy Text" tooltipPosition="top">
+                  <button type="button" class="btn" pTooltip="Copy Text" tooltipPosition="top" (click)="copykey(keyfield)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20.208" height="23.009" viewBox="0 0 20.208 23.009">
                     <path id="Icon_awesome-copy" data-name="Icon awesome-copy"
                       d="M14.005,19.608v1.751a1.05,1.05,0,0,1-1.05,1.05H1.05A1.05,1.05,0,0,1,0,21.358V5.252A1.05,1.05,0,0,1,1.05,4.2H4.2V17.157a2.454,2.454,0,0,0,2.451,2.451Zm0-15.056V0H6.653A1.05,1.05,0,0,0,5.6,1.05V17.157a1.05,1.05,0,0,0,1.05,1.05h11.9a1.05,1.05,0,0,0,1.05-1.05V5.6H15.056A1.053,1.053,0,0,1,14.005,4.552ZM19.3,3.194,16.414.308A1.05,1.05,0,0,0,15.671,0h-.265V4.2h4.2V3.936a1.05,1.05,0,0,0-.308-.743Z"
