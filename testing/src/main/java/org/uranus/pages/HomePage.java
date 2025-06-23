@@ -19,7 +19,7 @@ public class HomePage extends PageBase {
         this.driver = uranusDriver.webDriver;
     }   
 
-   // This defines a locators for a Elements in a webpage.
+    // This defines a locators for a Elements in a webpage.
     By signUpBtn = By.cssSelector("#collapsibleNavId div a:first-child");
     By loginBtn = By.cssSelector(".btn-outline-secondary");
     By nameField = By.id("signUpName");
