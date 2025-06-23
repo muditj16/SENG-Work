@@ -1,5 +1,25 @@
 package io.uranus.ucrypt.services.support.encryption.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import io.uranus.ucrypt.api.v1.resources.GenerateEncryptionKeyResponseResource;
 import io.uranus.ucrypt.data.dtos.encryption.DecryptFileRequestDto;
 import io.uranus.ucrypt.data.dtos.encryption.DecryptTextRequestDto;
@@ -11,26 +31,13 @@ import io.uranus.ucrypt.services.support.encryption.FileEncryptionHandler;
 import io.uranus.ucrypt.services.support.encryption.TextEncryptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.*;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TripleDesEncryptionHandler implements EncryptionKeyHandler, FileEncryptionHandler, TextEncryptionHandler {
 
-    private static final int KEY_SIZE = 10;
+    private static final int KEY_SIZE = 112; 
     private static final String ALGORITHM_NAME = "DESede";
     private static final String ALTERNATIVE_ALGORITHM_NAME = "Triple Des";
 
