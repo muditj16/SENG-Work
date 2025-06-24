@@ -30,9 +30,10 @@ public class FileUploadVisibility {
     private UserRegistrationModel employeeUser = UranusFaker.getRandomEmployeeRegistration();
     private UserRegistrationModel regularUser = UranusFaker.getRandomUserRegistration();
 
+
     private static String testFileName = "png.png";
     private static String testFilePath;
-    
+
     @BeforeAll
     public static void setup() {
         webDriver = UranusDriver.getInstance();
@@ -81,8 +82,7 @@ public class FileUploadVisibility {
         Assert.assertTrue(AdminPanelPage.isFileVisible(testFileName), "Expected file to be visible to Admin.");
 
         logout();
-
-        loginAs("test1750446775984@example.com", employeeUser.password, "employee");
+        approveAccountEmployee();
         homePage.openResourcesMenu();
         Assert.assertTrue(AdminPanelPage.isFileVisible(testFileName), "Expected file to be visible to Employee.");
 
@@ -93,7 +93,7 @@ public class FileUploadVisibility {
     // ========= Scenario 2 ==========
     @Given("I log in as regular user")
     public void i_log_in_as_a_regular_user() {
-        loginAs("test1750446852485@example.com", regularUser.password, "user");
+        approveAccountUser();
         homePage.closeToastMsg();
     }
 
@@ -111,28 +111,33 @@ public class FileUploadVisibility {
         homePage.login(adminEmail, adminPassword);
         homePage.closeToastMsg();
     }
+
     @Given("I navigate to the resource section of the admin panel")
     public void i_navigate_to_the_resource_section_of_the_admin_panel() {
         homePage.openAdminPanel();
         AdminPanelPage.openResourcesTab();
     }
+
     @Given("I click choose to upload a file")
-    public void i_click_choose_to_upload_a_file(){
+    public void i_click_choose_to_upload_a_file() {
         // Upload skipped due to system limit of 20 resources.
         // This step is kept for consistency with the user story.
         //can be uncommented and works
         AdminPanelPage.uploadFile(testFilePath);
         homePage.clickUpload();
     }
+
     @Then("the uploaded file is shown as a preview")
     public void the_uploaded_file_is_shown_as_a_preview() {
         boolean isPreviewDisplayed = AdminPanelPage.isFileVisible(testFileName); // Check preview by filename
         Assert.assertTrue(isPreviewDisplayed, "Expected file preview to be visible after upload");
     }
+
     @When("I click the cancel button")
     public void i_click_the_cancel_button() {
         homePage.clickCancelUpload();
     }
+
     @Then("the staged file is removed from the preview")
     public void the_staged_file_is_removed_from_the_preview() {
         boolean isPreviewDisplayed = AdminPanelPage.isFileVisible(testFileName);
@@ -177,4 +182,34 @@ public class FileUploadVisibility {
         }
     }
 
+    public void approveButton() {
+       WebElement approve =  homePage.findElement(By.cssSelector("button.approve"));
+       approve.click();
+    }
+
+    public void approveAccountEmployee() {
+        homePage.signUp(employeeUser);
+        homePage.closeToastMsg();
+        homePage.login(adminEmail, adminPassword);
+        homePage.closeToastMsg();
+        homePage.openAdminPanel();
+        String fakerUserEmail = employeeUser.email;
+        approveButton();
+        homePage.logout();
+
+        homePage.login(fakerUserEmail, employeeUser.password);
+        homePage.closeToastMsg();
+    }
+    public void approveAccountUser() {
+        homePage.signUp(regularUser);
+        homePage.closeToastMsg();
+        homePage.login(adminEmail, adminPassword);
+        homePage.closeToastMsg();
+        homePage.openAdminPanel();
+        String fakerUserEmail = regularUser.email;
+        approveButton();
+        homePage.logout();
+        homePage.login(fakerUserEmail, regularUser.password);
+        homePage.closeToastMsg();
+    }
 }
