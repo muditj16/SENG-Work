@@ -1,28 +1,19 @@
-version: "3.8"
-
 services:
-  sql-server:
-    image: mcr.microsoft.com/mssql/server
+  mysql-server:
+    image: mysql:8.0
     restart: always
     environment:
-      SA_PASSWORD: a225034862650A
-      ACCEPT_EULA: Y
-      MSSQL_PID: Express
-      MSSQL_DATABASE: ucrypt
+      MYSQL_ROOT_PASSWORD: Password123!
+      MYSQL_DATABASE: ucrypt
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Password123!
     ports:
-      - "1433:1433"
+      - "3307:3306"
     networks:
       - uCryptNetwork
 
-  db-init:
-    image: mcr.microsoft.com/mssql/server
-    network_mode: service:sql-server
-    command: bash -c 'until /opt/mssql-tools18/bin/sqlcmd -U sa -P a225034862650A -C -N -Q "CREATE DATABASE ucrypt"; do echo retry && sleep 1; done'
-    depends_on:
-      - sql-server
-
   frontend:
-    image: sleepsleep1000/frontend
+    image: sleepsleep1000/frontend:latest
     restart: always
     ports:
       - "80:80"
@@ -32,22 +23,22 @@ services:
       - ucrypt-app
 
   ucrypt-app:
-    image: sleepsleep1000/backend
+    image: sleepsleep1000/backend:latest
     restart: always
     ports:
       - "8080:8080"
-    depends_on:
-      - sql-server
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://sql-server:1433;databaseName=ucrypt;encrypt=true;trustServerCertificate=true;
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: a225034862650A
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3307/ucrypt
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: Password123!
       SPRING_PROFILES_ACTIVE: dev,docker
       BASIC_FOLDER_PATH: /data
     volumes:
       - data-volume:/data
     networks:
       - uCryptNetwork
+    depends_on:
+      - mysql-server
 
 volumes:
   data-volume:

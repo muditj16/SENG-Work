@@ -11,7 +11,7 @@ Feature: File Upload Visibility
     Then The Resources tab should not be visible
 
   Scenario: Admin cancels process during upload
-     Given I am signed in as an admin user
+     Given I am logged in as an admin
      And I navigate to the resource section of the admin panel
      And I click choose to upload a file
      Then the uploaded file is shown as a preview

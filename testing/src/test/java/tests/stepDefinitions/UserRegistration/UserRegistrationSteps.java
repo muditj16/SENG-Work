@@ -1,4 +1,4 @@
-package tests.stepDefinitions;
+package tests.stepDefinitions.UserRegistration;
 
 
 import static org.uranus.assertions.UranusAssertions.assertTextContentMatches;
@@ -10,6 +10,7 @@ import org.uranus.model.UserRegistrationModel;
 import org.uranus.pages.AdminPanelPage;
 import org.uranus.pages.HomePage;
 
+import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
@@ -17,7 +18,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class UserRegistration {
+public class UserRegistrationSteps {
 
     private HomePage homePage;
     private UserRegistrationModel user;
@@ -39,6 +40,11 @@ public class UserRegistration {
         webDriver.refresh();
         user = UranusFaker.getRandomUserRegistration();
         homePage = new HomePage(webDriver);
+    }
+
+    @After
+    public void afterScenario() {
+        webDriver.refresh();
     }
 
     @Given("I am a new user on the sign up page")
@@ -121,6 +127,7 @@ public class UserRegistration {
         AdminPanelPage adminPanelPage = new AdminPanelPage(webDriver);
         adminPanelPage.approveSignUpRequest(user);
 
+        webDriver.refresh();
         homePage.logout();
     }
 
@@ -128,6 +135,13 @@ public class UserRegistration {
     public void the_user_should_be_able_to_log_in() {
         homePage.login(user.email, user.password);
         assertTextContentMatches(webDriver.getElement(homePage.toastMsg), "Successfully logged in!");
+        homePage.closeToastMsg();
+    }
+
+    @Then("I should not be able to login if the admin has not approved me")
+    public void i_should_not_be_able_to_login_if_the_admin_has_not_approved_me() {
+        homePage.login(user.email, user.password);
+        assertTextContentMatches(webDriver.getElement(homePage.toastMsg), "Invalid credentials!");
         homePage.closeToastMsg();
     }
 }

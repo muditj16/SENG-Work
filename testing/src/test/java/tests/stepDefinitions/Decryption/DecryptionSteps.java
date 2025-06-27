@@ -1,4 +1,4 @@
-package tests.stepDefinitions;
+package tests.stepDefinitions.Decryption;
 
 import static org.testng.Assert.assertTrue;
 import static org.uranus.assertions.UranusAssertions.assertTextContentMatches;
@@ -23,7 +23,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class Decryption {
+public class DecryptionSteps {
 
     private static HomePage homePage;
     private static UranusDriver webDriver;
@@ -69,6 +69,9 @@ public class Decryption {
 
     @After
     public void afterScenario() {
+        webDriver.refresh();
+        homePage.logout();
+        homePage.closeToastMsg();
         webDriver.refresh();
     }
 

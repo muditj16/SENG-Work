@@ -1,4 +1,4 @@
-package tests.stepDefinitions;
+package tests.stepDefinitions.Encryption;
 
 import static org.uranus.assertions.UranusAssertions.assertIsValidKey;
 import static org.uranus.assertions.UranusAssertions.assertTextContentMatches;
@@ -21,7 +21,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class Encryption {
+public class EncryptionSteps {
 
     private static HomePage homePage;
     private static UranusDriver webDriver;

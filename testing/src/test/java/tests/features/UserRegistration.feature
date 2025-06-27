@@ -3,6 +3,7 @@ Feature: User Registration
         Given I am a new user on the sign up page
         When I enter all mandatory registration details correctly
         Then I should be able to register successfully and receive a confirmation email
+        Then I should not be able to login if the admin has not approved me
 
     Scenario: Successful User Registration approval
         Given A new user has signed up

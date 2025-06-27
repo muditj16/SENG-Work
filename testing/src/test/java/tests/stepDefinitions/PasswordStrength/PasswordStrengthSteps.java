@@ -1,4 +1,4 @@
-package tests.stepDefinitions;
+package tests.stepDefinitions.PasswordStrength;
 
 
 import static org.uranus.assertions.UranusAssertions.assertTextContentMatches;
@@ -17,7 +17,7 @@ import io.cucumber.java.en.When;
 
 // ...existing imports...
 
-public class PasswordStrength {
+public class PasswordStrengthSteps {
     private HomePage homePage;
     private UserRegistrationModel user;
     private static UranusDriver webDriver;

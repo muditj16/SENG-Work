@@ -90,8 +90,6 @@ public class HomePage extends PageBase {
         click(closeToastMsg);
     }
 
-
-
     public void openEncryptionPage() {
         click(tryUcryptDropdown);
         click(tryUcryptDropdownEncryptionLink);
@@ -114,6 +112,7 @@ public class HomePage extends PageBase {
         click(profileDropdown);
         click(profileDropdownLogoutLink);
     }
+
     public void clickCancelUpload() {
         WebElement cancelBtn = webDriver.findElement(By.xpath("//p-fileupload//button[.//span[text()='Cancel']]"));
         cancelBtn.click();

@@ -1,4 +1,4 @@
-package tests.stepDefinitions;
+package tests.stepDefinitions.CopyButton;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -19,7 +19,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class CopyButton {
+public class CopyButtonSteps {
 
     private static UranusDriver webDriver;
     private HomePage homePage;

@@ -1,4 +1,4 @@
-package tests.cucumber;
+package tests.stepDefinitions.PasswordStrength;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
@@ -6,9 +6,9 @@ import io.cucumber.testng.CucumberOptions;
 // Configure Cucumber options using the @CucumberOptions annotation
 @CucumberOptions(
         // Specify the path to the feature files
-        features = "src/test/java/tests/features/FileUploadVisibility.feature",
+        features = "src/test/java/tests/features/PasswordStrength.feature",
         // Specify the package containing the step definitions
-        glue = "tests.stepDefinitions",
+        glue = "tests.stepDefinitions.PasswordStrength",
         
         // Specify the plugins for generating reports
         plugin = {"pretty", "html:target/cucumber-reports.html", "json:target/cucumber-reports.json"},
@@ -19,7 +19,7 @@ import io.cucumber.testng.CucumberOptions;
 )
 
 // Define the TestNGRunner class that extends AbstractTestNGCucumberTests to integrate Cucumber with TestNG
-public class TestNGRunner extends AbstractTestNGCucumberTests {
+public class TestPasswordStrengthRunner extends AbstractTestNGCucumberTests {
     // No additional code needed, as configuration is handled by annotations and superclass
 }
 

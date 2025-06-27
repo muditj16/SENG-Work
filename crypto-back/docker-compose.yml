@@ -1,6 +1,17 @@
-version: '3.8'
-
 services:
+  mysql-server:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Password123!
+      MYSQL_DATABASE: ucrypt
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Password123!
+    ports:
+      - "3307:3306"
+    networks:
+      - uCryptNetwork
+
   frontend:
     build:
       context: ../UCryptPortal
@@ -19,15 +30,17 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/ucrypt
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Khan54321@
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3307/ucrypt
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: Password123!
       SPRING_PROFILES_ACTIVE: dev,docker
       BASIC_FOLDER_PATH: /data
     volumes:
       - data-volume:/data
     networks:
       - uCryptNetwork
+    depends_on:
+      - mysql-server
 
 volumes:
   data-volume:

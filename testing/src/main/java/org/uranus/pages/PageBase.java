@@ -1,5 +1,8 @@
 package org.uranus.pages;
 
+import java.time.Duration;
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -8,9 +11,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.List;
 
 
     // The PageBase class serves as the base class for all pages in the application.
@@ -38,8 +38,9 @@ public class PageBase {
 
     /* custom method for clicking action with waiting to avoid loading issues*/
     public void click(By by) {
-        webDriverWait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfElementLocated(by)));
-        webDriverWait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(by)));
+        WebDriverWait shortWait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        shortWait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfElementLocated(by)));
+        shortWait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(by)));
         webElement = webDriver.findElement(by);
         webElement.click();
     }
