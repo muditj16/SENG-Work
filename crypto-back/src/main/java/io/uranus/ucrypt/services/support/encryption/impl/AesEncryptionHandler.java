@@ -33,6 +33,7 @@ public class AesEncryptionHandler implements EncryptionKeyHandler, FileEncryptio
 
     private static final int KEY_SIZE = 256;
     private static final String ALGORITHM_NAME = "AES";
+    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
 
     @Override
     public GenerateEncryptionKeyResponseResource generateEncryptionKey() {
