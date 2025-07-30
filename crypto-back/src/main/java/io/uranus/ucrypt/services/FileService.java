@@ -112,13 +112,31 @@ public class FileService {
         final var rootLocation = Paths.get(this.FILES_BASIC_FOLDER_PATH);
 
         try {
-            final Path file = rootLocation.resolve(filePath);
+            // Validate and sanitize the file path to prevent path traversal attacks
+            if (filePath == null || filePath.trim().isEmpty()) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "File path cannot be null or empty");
+            }
+            
+            // Check for path traversal patterns
+            if (filePath.contains("..") || filePath.contains("./") || filePath.contains("\\")) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid file path: path traversal detected");
+            }
+            
+            // Normalize the file path to remove any remaining dangerous patterns
+            final String sanitizedPath = Paths.get(filePath).normalize().toString();
+            final Path file = rootLocation.resolve(sanitizedPath);
+            
+            // Ensure the resolved path is still within the root directory
+            if (!file.normalize().startsWith(rootLocation.normalize())) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "Access denied: file path outside allowed directory");
+            }
+            
             final Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return constructDownloadFileEntity(resource);
             } else {
                 throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        String.format("Could not read file with path: %s", filePath));
+                        String.format("Could not read file with path: %s", sanitizedPath));
             }
         } catch (final MalformedURLException e) {
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -150,12 +168,29 @@ public class FileService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteFile(final String filePath) {
+        // Validate and sanitize the file path to prevent path traversal attacks
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "File path cannot be null or empty");
+        }
+        
+        // Check for path traversal patterns
+        if (filePath.contains("..") || filePath.contains("./") || filePath.contains("\\")) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid file path: path traversal detected");
+        }
+        
         final var fileEntity = this.fileRepository.findByPath(filePath)
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "File not found"));
 
         try {
             final var rootLocation = Paths.get(this.FILES_BASIC_FOLDER_PATH);
-            final Path file = rootLocation.resolve(filePath).normalize().toAbsolutePath();
+            final String sanitizedPath = Paths.get(filePath).normalize().toString();
+            final Path file = rootLocation.resolve(sanitizedPath).normalize().toAbsolutePath();
+            
+            // Ensure the resolved path is still within the root directory
+            if (!file.startsWith(rootLocation.normalize().toAbsolutePath())) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "Access denied: file path outside allowed directory");
+            }
+            
             Files.deleteIfExists(file);
             this.fileRepository.delete(fileEntity);
         } catch (final IOException e) {

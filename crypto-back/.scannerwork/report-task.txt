@@ -1,0 +1,6 @@
+projectKey=crypto-back
+serverUrl=http://localhost:9000
+serverVersion=25.7.0.110598
+dashboardUrl=http://localhost:9000/dashboard?id=crypto-back
+ceTaskId=7aba731f-fbd3-4799-b7bd-34136cf12ab9
+ceTaskUrl=http://localhost:9000/api/ce/task?id=7aba731f-fbd3-4799-b7bd-34136cf12ab9

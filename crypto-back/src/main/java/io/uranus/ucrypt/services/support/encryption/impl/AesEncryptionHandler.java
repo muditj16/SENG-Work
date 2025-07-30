@@ -92,7 +92,7 @@ public class AesEncryptionHandler implements EncryptionKeyHandler, FileEncryptio
         final var secretKey = generateEncryptionSecretKey(encodedKey);
 
         try {
-            final Cipher cipher = Cipher.getInstance(ALGORITHM_NAME);
+            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(encryptionMode, secretKey);
             final var inputStream = new ByteArrayInputStream(file);
             final var outputStream = new ByteArrayOutputStream();
@@ -176,7 +176,7 @@ public class AesEncryptionHandler implements EncryptionKeyHandler, FileEncryptio
         try {
             final var secretKey = generateEncryptionSecretKey(encodedKey);
 
-            final Cipher cipher = Cipher.getInstance(ALGORITHM_NAME);
+            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(encryptionMode, secretKey);
             final byte[] cipherText = cipher.doFinal(textInBytes);
 

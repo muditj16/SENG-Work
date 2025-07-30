@@ -3,8 +3,10 @@ package io.uranus.ucrypt.services.support.encryption.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
@@ -13,6 +15,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.core.io.InputStreamResource;
@@ -37,9 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TripleDesEncryptionHandler implements EncryptionKeyHandler, FileEncryptionHandler, TextEncryptionHandler {
 
-    private static final int KEY_SIZE = 112; 
-    private static final String ALGORITHM_NAME = "DESede";
-    private static final String ALTERNATIVE_ALGORITHM_NAME = "Triple Des";
+    private static final int KEY_SIZE = 256; 
+    private static final String ALGORITHM_NAME = "AES";
+    private static final String ALTERNATIVE_ALGORITHM_NAME = "TripleDES";
+    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
+    private static final int GCM_IV_LENGTH = 12; // GCM recommended IV length
+    private static final int GCM_TAG_LENGTH = 16; // GCM tag length in bytes
 
     @Override
     public GenerateEncryptionKeyResponseResource generateEncryptionKey() {
@@ -59,18 +65,13 @@ public class TripleDesEncryptionHandler implements EncryptionKeyHandler, FileEnc
     @Override
     public boolean isValidEncryptionKey(final String encodedKey) {
         try {
-            // throws IllegalArgumentException - if src is not in valid Base64
             final byte[] keyData = Base64.getDecoder().decode(encodedKey);
-            final int encodedKeySize = keyData.length * Byte.SIZE;
-
-            if (encodedKeySize == 192) {
-                return true;
-            }
+            final int keyBitLength = keyData.length * Byte.SIZE;
+            // Validate AES key sizes: 128, 192, or 256 bits
+            return keyBitLength == 128 || keyBitLength == 192 || keyBitLength == 256;
         } catch (final IllegalArgumentException e) {
             return false;
         }
-
-        return false;
     }
 
     @Override
@@ -98,35 +99,43 @@ public class TripleDesEncryptionHandler implements EncryptionKeyHandler, FileEnc
         final var secretKey = generateEncryptionSecretKey(encodedKey);
 
         try {
-            final Cipher cipher = Cipher.getInstance(ALGORITHM_NAME);
-            cipher.init(encryptionMode, secretKey);
-            final var inputStream = new ByteArrayInputStream(file);
-            final var outputStream = new ByteArrayOutputStream();
-            final byte[] buffer = new byte[64];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                final byte[] output = cipher.update(buffer, 0, bytesRead);
-                if (output != null) {
-                    outputStream.write(output);
+            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            
+            if (encryptionMode == Cipher.ENCRYPT_MODE) {
+                // Generate and write IV first
+                final byte[] iv = new byte[GCM_IV_LENGTH];
+                new SecureRandom().nextBytes(iv);
+                outputStream.write(iv);
+                
+                // Initialize cipher and encrypt
+                cipher.init(encryptionMode, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+                outputStream.write(cipher.doFinal(file));
+            } else {
+                // Validate file length and extract IV
+                if (file.length < GCM_IV_LENGTH) {
+                    throw new IllegalArgumentException("File too short for decryption");
                 }
+                
+                final byte[] iv = new byte[GCM_IV_LENGTH];
+                final byte[] encryptedData = new byte[file.length - GCM_IV_LENGTH];
+                System.arraycopy(file, 0, iv, 0, GCM_IV_LENGTH);
+                System.arraycopy(file, GCM_IV_LENGTH, encryptedData, 0, encryptedData.length);
+                
+                // Initialize cipher and decrypt
+                cipher.init(encryptionMode, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+                outputStream.write(cipher.doFinal(encryptedData));
             }
-            final byte[] outputBytes = cipher.doFinal();
-            if (outputBytes != null) {
-                outputStream.write(outputBytes);
-            }
-            inputStream.close();
-            outputStream.close();
-
+            
             return new InputStreamResource(new ByteArrayInputStream(outputStream.toByteArray()));
-        } catch (final NoSuchAlgorithmException |
-                       NoSuchPaddingException e) {
+            
+        } catch (final NoSuchAlgorithmException | NoSuchPaddingException e) {
             log.error(e.getMessage(), e);
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR,
                     String.format("Error in %s file for %s algorithm please contact the admin for more information!",
                             encryptionModeInString, ALTERNATIVE_ALGORITHM_NAME));
-        } catch (final InvalidKeyException |
-                       BadPaddingException |
-                       IllegalBlockSizeException e) {
+        } catch (final InvalidKeyException | BadPaddingException | 
+                       IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             log.info(e.getMessage(), e);
             throw new BusinessException(HttpStatus.BAD_REQUEST,
                     String.format("Error in %s file for %s algorithm please verify your key is correct",
@@ -180,25 +189,45 @@ public class TripleDesEncryptionHandler implements EncryptionKeyHandler, FileEnc
 
         try {
             final var secretKey = generateEncryptionSecretKey(encodedKey);
-
-            final Cipher cipher = Cipher.getInstance(ALGORITHM_NAME);
-            cipher.init(encryptionMode, secretKey);
-            final byte[] cipherText = cipher.doFinal(textInBytes);
-
+            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            
+            byte[] result;
+            
             if (encryptionMode == Cipher.ENCRYPT_MODE) {
-                return Base64.getEncoder().encodeToString(cipherText);
+                // Generate IV and encrypt
+                final byte[] iv = new byte[GCM_IV_LENGTH];
+                new SecureRandom().nextBytes(iv);
+                cipher.init(encryptionMode, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+                
+                final byte[] encrypted = cipher.doFinal(textInBytes);
+                result = new byte[GCM_IV_LENGTH + encrypted.length];
+                System.arraycopy(iv, 0, result, 0, GCM_IV_LENGTH);
+                System.arraycopy(encrypted, 0, result, GCM_IV_LENGTH, encrypted.length);
+                
+                return Base64.getEncoder().encodeToString(result);
+            } else {
+                // Extract IV and decrypt
+                if (textInBytes.length < GCM_IV_LENGTH) {
+                    throw new IllegalArgumentException("Invalid encrypted text length");
+                }
+                
+                final byte[] iv = new byte[GCM_IV_LENGTH];
+                final byte[] encrypted = new byte[textInBytes.length - GCM_IV_LENGTH];
+                System.arraycopy(textInBytes, 0, iv, 0, GCM_IV_LENGTH);
+                System.arraycopy(textInBytes, GCM_IV_LENGTH, encrypted, 0, encrypted.length);
+                
+                cipher.init(encryptionMode, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+                result = cipher.doFinal(encrypted);
+                
+                return new String(result);
             }
-
-            return new String(cipherText);
-        } catch (final NoSuchAlgorithmException |
-                       NoSuchPaddingException e) {
+        } catch (final NoSuchAlgorithmException | NoSuchPaddingException e) {
             log.error(e.getMessage(), e);
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR,
                     String.format("Error in %s text for %s algorithm please contact the admin for more information!",
                             encryptionModeInString, ALTERNATIVE_ALGORITHM_NAME));
-        } catch (final InvalidKeyException |
-                       BadPaddingException |
-                       IllegalBlockSizeException e) {
+        } catch (final InvalidKeyException | BadPaddingException | 
+                       IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             throw new BusinessException(HttpStatus.BAD_REQUEST,
                     String.format("Error in %s text for %s algorithm please verify your key is correct",
                             encryptionModeInString, ALTERNATIVE_ALGORITHM_NAME));

@@ -17,13 +17,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.*;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 @Service
@@ -32,7 +35,10 @@ import java.util.Base64;
 public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncryptionHandler, TextEncryptionHandler {
 
     private static final int KEY_SIZE = 256;
-    private static final String ALGORITHM_NAME = "Blowfish";
+    private static final String ALGORITHM_NAME = "AES";
+    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
+    private static final int GCM_IV_LENGTH = 12; // GCM recommended IV length
+    private static final int GCM_TAG_LENGTH = 16; // GCM tag length in bytes
 
     @Override
     public GenerateEncryptionKeyResponseResource generateEncryptionKey() {
@@ -44,7 +50,7 @@ public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncr
                     .key(Base64.getEncoder().encodeToString(key.getEncoded()));
         } catch (final NoSuchAlgorithmException | InvalidParameterException e) {
             log.error(e.getMessage(), e);
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "Error in generating encryption key for Blowfish algorithm");
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "Error in generating encryption key for AES algorithm");
         }
     }
 
@@ -55,7 +61,7 @@ public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncr
             final byte[] keyData = Base64.getDecoder().decode(encodedKey);
             final int encodedKeySize = keyData.length * Byte.SIZE;
 
-            if (encodedKeySize >= 32 && encodedKeySize <= 448) {
+            if (encodedKeySize == 128 || encodedKeySize == 192 || encodedKeySize == 256) {
                 return true;
             }
         } catch (final IllegalArgumentException e) {
@@ -90,26 +96,13 @@ public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncr
         final var secretKey = generateEncryptionSecretKey(encodedKey);
 
         try {
-            final Cipher cipher = Cipher.getInstance(ALGORITHM_NAME);
-            cipher.init(encryptionMode, secretKey);
-            final var inputStream = new ByteArrayInputStream(file);
-            final var outputStream = new ByteArrayOutputStream();
-            final byte[] buffer = new byte[64];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                final byte[] output = cipher.update(buffer, 0, bytesRead);
-                if (output != null) {
-                    outputStream.write(output);
-                }
+            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            
+            if (encryptionMode == Cipher.ENCRYPT_MODE) {
+                return encryptFileData(cipher, secretKey, file);
+            } else {
+                return decryptFileData(cipher, secretKey, file);
             }
-            final byte[] outputBytes = cipher.doFinal();
-            if (outputBytes != null) {
-                outputStream.write(outputBytes);
-            }
-            inputStream.close();
-            outputStream.close();
-
-            return new InputStreamResource(new ByteArrayInputStream(outputStream.toByteArray()));
         } catch (final NoSuchAlgorithmException |
                        NoSuchPaddingException e) {
             log.error(e.getMessage(), e);
@@ -117,6 +110,7 @@ public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncr
                     String.format("Error in %s file for %s algorithm please contact the admin for more information!",
                             encryptionModeInString, ALGORITHM_NAME));
         } catch (final InvalidKeyException |
+                       InvalidAlgorithmParameterException |
                        BadPaddingException |
                        IllegalBlockSizeException e) {
             log.info(e.getMessage(), e);
@@ -129,6 +123,39 @@ public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncr
                     String.format("Error in %s file for %s algorithm please verify your file can be encrypted",
                             encryptionModeInString, ALGORITHM_NAME));
         }
+    }
+
+    private Resource encryptFileData(final Cipher cipher, final SecretKey secretKey, final byte[] file) 
+            throws InvalidKeyException, InvalidAlgorithmParameterException, IOException, 
+                   BadPaddingException, IllegalBlockSizeException {
+        final byte[] iv = new byte[GCM_IV_LENGTH];
+        new SecureRandom().nextBytes(iv);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+        
+        final var outputStream = new ByteArrayOutputStream();
+        outputStream.write(iv);
+        outputStream.write(cipher.doFinal(file));
+        outputStream.close();
+        
+        return new InputStreamResource(new ByteArrayInputStream(outputStream.toByteArray()));
+    }
+
+    private Resource decryptFileData(final Cipher cipher, final SecretKey secretKey, final byte[] file) 
+            throws InvalidKeyException, InvalidAlgorithmParameterException, IOException, 
+                   BadPaddingException, IllegalBlockSizeException {
+        if (file.length < GCM_IV_LENGTH) {
+            throw new IllegalArgumentException("Encrypted data is too short to contain IV");
+        }
+        
+        final byte[] iv = new byte[GCM_IV_LENGTH];
+        System.arraycopy(file, 0, iv, 0, GCM_IV_LENGTH);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+        
+        final byte[] encryptedData = new byte[file.length - GCM_IV_LENGTH];
+        System.arraycopy(file, GCM_IV_LENGTH, encryptedData, 0, encryptedData.length);
+        
+        final byte[] decryptedData = cipher.doFinal(encryptedData);
+        return new InputStreamResource(new ByteArrayInputStream(decryptedData));
     }
 
     @Override
@@ -172,16 +199,13 @@ public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncr
 
         try {
             final var secretKey = generateEncryptionSecretKey(encodedKey);
-
-            final Cipher cipher = Cipher.getInstance(ALGORITHM_NAME);
-            cipher.init(encryptionMode, secretKey);
-            final byte[] cipherText = cipher.doFinal(textInBytes);
-
+            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            
             if (encryptionMode == Cipher.ENCRYPT_MODE) {
-                return Base64.getEncoder().encodeToString(cipherText);
+                return performTextEncryption(cipher, secretKey, textInBytes);
+            } else {
+                return performTextDecryption(cipher, secretKey, textInBytes);
             }
-
-            return new String(cipherText);
         } catch (final NoSuchAlgorithmException |
                        NoSuchPaddingException e) {
             log.error(e.getMessage(), e);
@@ -189,12 +213,44 @@ public class BlowfishEncryptionHandler implements EncryptionKeyHandler, FileEncr
                     String.format("Error in %s text for %s algorithm please contact the admin for more information!",
                             encryptionModeInString, ALGORITHM_NAME));
         } catch (final InvalidKeyException |
+                       InvalidAlgorithmParameterException |
                        BadPaddingException |
                        IllegalBlockSizeException e) {
             throw new BusinessException(HttpStatus.BAD_REQUEST,
                     String.format("Error in %s text for %s algorithm please verify your key is correct",
                             encryptionModeInString, ALGORITHM_NAME));
         }
+    }
+
+    private String performTextEncryption(final Cipher cipher, final SecretKey secretKey, final byte[] textInBytes) 
+            throws InvalidKeyException, InvalidAlgorithmParameterException, 
+                   BadPaddingException, IllegalBlockSizeException {
+        final byte[] iv = new byte[GCM_IV_LENGTH];
+        new SecureRandom().nextBytes(iv);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+        
+        final byte[] cipherText = cipher.doFinal(textInBytes);
+        final byte[] result = new byte[GCM_IV_LENGTH + cipherText.length];
+        System.arraycopy(iv, 0, result, 0, GCM_IV_LENGTH);
+        System.arraycopy(cipherText, 0, result, GCM_IV_LENGTH, cipherText.length);
+        
+        return Base64.getEncoder().encodeToString(result);
+    }
+
+    private String performTextDecryption(final Cipher cipher, final SecretKey secretKey, final byte[] textInBytes) 
+            throws InvalidKeyException, InvalidAlgorithmParameterException, 
+                   BadPaddingException, IllegalBlockSizeException {
+        if (textInBytes.length < GCM_IV_LENGTH) {
+            throw new IllegalArgumentException("Encrypted text too short");
+        }
+        
+        final byte[] iv = new byte[GCM_IV_LENGTH];
+        final byte[] cipherText = new byte[textInBytes.length - GCM_IV_LENGTH];
+        System.arraycopy(textInBytes, 0, iv, 0, GCM_IV_LENGTH);
+        System.arraycopy(textInBytes, GCM_IV_LENGTH, cipherText, 0, cipherText.length);
+        
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv));
+        return new String(cipher.doFinal(cipherText));
     }
 
     private SecretKey generateEncryptionSecretKey(final String encodedKey) {
