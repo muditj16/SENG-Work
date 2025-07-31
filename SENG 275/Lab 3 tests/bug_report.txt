@@ -1,0 +1,13 @@
+Title: Incorrect validation of messages with hyphens in messageIsValid
+Submitter: Mudit Jaswal
+email address: muditj@uvic.ca
+
+Summary of bug: The method messageIsValid incorrectly validates messages containing hyphens. Returns true when character limit is exceeded or has hyphens at invalid positons.
+
+Expected behaviour: Return true when all messages meet criteria
+
+Actual behaviour: Returns true for messages containing hyphens
+
+Steps to Reproduce: Pass a message with hyphens to test the method. Handle hyphens at invalid positons and validate max character limit. Correctly identify messages composed only of numbers.
+
+Severity: Medium
