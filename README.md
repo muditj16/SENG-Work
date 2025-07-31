@@ -7,7 +7,7 @@ Welcome to my academic coursework and personal projects repository!
 ### Academic Coursework
 - **CSC 361** - Computer Communications and Networks
 - **SENG 275** - Software Testing  
-- **ECE 455** - Computer Architecture
+- **ECE 455** - Real Time Systems Project
 - **Real Time Graphics Scene** - Graphics programming projects
 
 ### Personal Projects
