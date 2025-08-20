@@ -1,6 +1,13 @@
-# Local Law - Mobile App Prototype
+# Local Law - Mobile App Prototype (In progress)
 
 A React-based mobile app prototype for "Local Law" - an educational app about local laws. Built using Vite + React with a mobile-first design approach.
+
+<img width="1910" height="938" alt="Screenshot 2025-08-19 193845" src="https://github.com/user-attachments/assets/4de9eadb-d06b-4a63-972f-b733d47119c6" />
+<img width="1877" height="935" alt="Screenshot 2025-08-19 193854" src="https://github.com/user-attachments/assets/d60a5411-d3a7-4cf0-b63a-5261725e1560" />
+<img width="1919" height="925" alt="Screenshot 2025-08-19 193909" src="https://github.com/user-attachments/assets/22c73b62-f612-452c-ac85-5cf62b9a344c" />
+<img width="1867" height="931" alt="Screenshot 2025-08-19 193918" src="https://github.com/user-attachments/assets/59cd5bd5-9313-4ff2-b5dd-271018d51fc6" />
+<img width="1910" height="939" alt="Screenshot 2025-08-19 193926" src="https://github.com/user-attachments/assets/a299d704-bf53-4e68-9c6c-b6e783a66150" />
+
 
 ## Features
 
