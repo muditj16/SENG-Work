@@ -1,10 +1,12 @@
 Mudit Jaswal
-V00982906
 Assignment 2 - CSC 305	
 
 
 Description:
 This scene shows Earth orbiting the Sun with the Moon orbiting Earth. Suddenly, an asteroid crashes into Earth. The impact causes both Earth and the Moon to explode. This scene also features a three level hierarchical object (ufo) moving in space. I have used lab 7 code as template and have referred to Illuminations lecture pdf for fragment shader.
+
+https://github.com/user-attachments/assets/0f254c6d-0792-4258-811d-b4c6cc527517
+
 
 Working
 1. UFO moving in space is atleast three level hierarchical object. 
