@@ -60,8 +60,6 @@ This project explores the implementation and analysis of digital filters, focusi
 - Overflow handling and input scaling strategies
 - Hardware MAC latency and silicon gate penalty
 
-## Contributors
-- Mihai SIMA © 2024
 
 ## Course
 SENG440 Embedded Systems (106: Digital Filters)
