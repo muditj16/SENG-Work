@@ -1,6 +1,5 @@
 Mudit Jaswal
-V00982906
-CSC 361 Programming Assignment 2
+
 
 What does AnalyzerTCP.py do?
 AnalyzerTCP.py is a Python script that analyzes TCP connections from a packet capture (.cap) file. It parses the global and packet headers, extracts TCP and IP information, and identifies unique TCP connections. For each connection, it calculates statistics such as duration, number of packets, data bytes sent/received, and round-trip times (RTT). The script prints a summary of all connections, including complete, reset, and open connections, and provides detailed metrics for each.
