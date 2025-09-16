@@ -5,9 +5,13 @@ FreeRTOS project
 This folder contains the ECE455 main project, which demonstrates real-time operating system (RTOS) concepts using FreeRTOS on embedded hardware. The code and hardware setup are designed for hands-on learning in embedded systems and digital control.
 
 ## Hardware Description
-See the attached image below for hardware documentation:
+See the attached video below for hardware documentation:
 
-![ECE455 Breadboard Hardware](../attachments/0.jpg)
+
+https://github.com/user-attachments/assets/7b69c67c-5370-4187-9de1-cd5491b846ad
+
+
+
 
 Key features include:
 - Multiple LEDs (green, red, yellow) for output indication and status display.
