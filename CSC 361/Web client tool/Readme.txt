@@ -1,6 +1,5 @@
 Mudit Jaswal
-V00982906
-CSC 361 Assignment 3
+
 
 What does P3_Fall2024.py do?
 P3_Fall2024.py is a Python script for analyzing network capture files (.cap) to study client-server interactions. It parses packet headers for ICMP, UDP, and IP protocols, extracts key metrics (IP addresses, protocol usage, fragments, RTTs), and prints a detailed summary including intermediate nodes, probe counts, and round-trip times. The script helps visualize and understand network paths and protocol behavior for educational networking assignments.
