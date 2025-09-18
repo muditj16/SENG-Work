@@ -1,4 +1,4 @@
-# ECE 355 Project Overview
+# Project Overview
 
 This folder contains coursework and projects for ECE 355, focusing on digital signal processing and embedded systems. The main file, `PWM project.c`, demonstrates Pulse Width Modulation (PWM) techniques, which are commonly used for controlling motors, LEDs, and other devices in embedded applications. The code showcases how to generate and manipulate PWM signals programmatically, providing a practical example for students learning about real-time digital control.
 
