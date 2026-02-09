@@ -18,29 +18,29 @@ A comprehensive secure encryption web application developed as part of SENG 426 
 ## Project Deliverables Overview
 
 ### Part 1: CI/CD Pipeline Setup (2% - Due June 1, 2025)
-- ✅ Azure DevOps pipeline implementation
-- ✅ Automated build generation for both frontend and backend
-- ✅ Docker containerization setup
+-  Azure DevOps pipeline implementation
+-  Automated build generation for both frontend and backend
+-  Docker containerization setup
 
 ### Part 2: Requirements & Backlog (5% - Due June 8, 2025)
-- ✅ Comprehensive requirements specification
-- ✅ User story backlog development
-- ✅ Acceptance criteria definition
+-  Comprehensive requirements specification
+-  User story backlog development
+-  Acceptance criteria definition
 
 ### Part 3: Automated Functional Testing (14% - Due June 22, 2025)
-- ✅ Selenium WebDriver test automation
-- ✅ TestNG framework implementation
-- ✅ Bug fixes and new functionality implementation
+-  Selenium WebDriver test automation
+-  TestNG framework implementation
+-  Bug fixes and new functionality implementation
 
 ### Part 4: Performance & Scalability Testing (14% - Due July 13, 2025)
-- ✅ Load testing implementation
-- ✅ Stress testing scenarios
-- ✅ Performance metrics analysis
+-  Load testing implementation
+-  Stress testing scenarios
+-  Performance metrics analysis
 
 ### Part 5: Security Testing (10% - Due August 1, 2025)
-- ✅ OWASP ZAP security scanning
-- ✅ Vulnerability assessment and remediation
-- ✅ Security best practices implementation
+-  OWASP ZAP security scanning
+-  Vulnerability assessment and remediation
+-  Security best practices implementation
 
 ## Web APP
 <img width="1906" height="942" alt="Screenshot 2025-08-21 143258" src="https://github.com/user-attachments/assets/b6c88fb9-c8c4-48d7-a0a3-41a4c91c8211" />
@@ -68,5 +68,6 @@ A comprehensive secure encryption web application developed as part of SENG 426 
 - **Testing**: Selenium WebDriver, TestNG, Cucumber
 - **Security**: SonarQube, OWASP ZAP
 - **Deployment**: Docker, Azure DevOps
+
 
 
