@@ -1,6 +1,6 @@
 ﻿# UCrypt Web Application Project - SENG 426 Lab Project
 
-A comprehensive secure encryption web application developed as part of SENG 426 Summer 2025 course project. This project demonstrates advanced software engineering practices including CI/CD pipelines, automated testing, performance analysis, and security testing.
+A comprehensive secure encryption web application developed. This project demonstrates advanced software engineering practices including CI/CD pipelines, automated testing, performance analysis, and security testing.
 
 ## Project Structure
 
@@ -62,6 +62,7 @@ A comprehensive secure encryption web application developed as part of SENG 426 
 - **Testing**: Selenium WebDriver, TestNG, Cucumber
 - **Security**: SonarQube, OWASP ZAP
 - **Deployment**: Docker, Azure DevOps
+
 
 
 
